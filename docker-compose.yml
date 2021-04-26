@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  spring:
+    build: ./air-quality-service
+    container_name: air-quality-service
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    image: air-quality-service

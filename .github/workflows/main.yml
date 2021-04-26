@@ -1,0 +1,38 @@
+name: Spring Boot CI Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: Running Java ${{ matrix.java }} compile
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Java 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Compile code
+      run: mvn -B compile
+      working-directory: ./air-quality-service
+
+  test:
+    runs-on: ubuntu-latest
+    name: Running tests
+    needs: compile
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Java 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Run unit tests
+      run: mvn -B test
+      working-directory: ./air-quality-service
+      
