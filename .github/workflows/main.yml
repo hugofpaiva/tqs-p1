@@ -32,7 +32,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '11'
-      - name: Run unit tests
-        run: mvn -B test
-        working-directory: ./air-quality-service
+    - name: Run unit tests
+      run: mvn -B test
+      working-directory: ./air-quality-service
       
