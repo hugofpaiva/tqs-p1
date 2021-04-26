@@ -21,9 +21,9 @@ public class MeasurementController {
     @Autowired
     MeasurementService measurementService;
 
-    @GetMapping("/measurement")
-    public ResponseEntity<Measurement> getMeasurement(@RequestParam Double lat, @RequestParam Double lon) throws ResourceNotFoundException {
-        Measurement response = measurementService.getMeasurementByLocation(lat, lon);
+    @GetMapping("/actual-measurement")
+    public ResponseEntity<Measurement> getActualMeasurement(@RequestParam Double lat, @RequestParam Double lon) throws ResourceNotFoundException {
+        Measurement response = measurementService.getActualMeasurementByLocation(lat, lon);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 

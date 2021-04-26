@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Formatter;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
 public class OpenWeatherMeasurementResolver implements MeasurementResolver{
@@ -29,7 +27,7 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
     private Environment environments;
 
     @Override
-    public Measurement getMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotResponding, ParseException {
+    public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotResponding, ParseException {
         URIBuilder uriBuilder = new URIBuilder("http://api.openweathermap.org/data/2.5/air_pollution");
         uriBuilder.addParameter("appid", environments.getProperty("openweathermap.api.key"));
         uriBuilder.addParameter("lat", (new Formatter()).format(Locale.US, "%.6f", latitude).toString());
@@ -47,17 +45,30 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
         Integer aqi = ((Long) ((JSONObject) obj.get("main")).get("aqi")).intValue();
         JSONObject components = (JSONObject) obj.get("components");
 
-        Double co =  (Double) components.get("co");
-        Double no =  (Double) components.get("no");
-        Double no2 =  (Double) components.get("no2");
-        Double o3 =  (Double) components.get("o3");
-        Double so2 =  (Double)  components.get("so2");
-        Double pm2_5 =  (Double) components.get("pm2_5");
-        Double pm10 =  (Double) components.get("pm10");
-        Double nh3 =  (Double) components.get("nh3");
+        Double co =  Double.valueOf(String.valueOf(components.get("co")));
+        Double no =  Double.valueOf(String.valueOf(components.get("no")));
+        Double no2 =  Double.valueOf(String.valueOf(components.get("no2")));
+        Double o3 = Double.valueOf(String.valueOf(components.get("o3")));
+        Double so2 =  Double.valueOf(String.valueOf(components.get("so2")));
+        Double pm2_5 =  Double.valueOf(String.valueOf(components.get("pm2_5")));
+        Double pm10 =  Double.valueOf(String.valueOf(components.get("pm10")));
+        Double nh3 =  Double.valueOf(String.valueOf(components.get("nh3")));
 
         System.out.printf("co: %f no2: %f, lat: %f", co, no2, latitude);
 
-        return new Measurement(latitude, longitude, aqi, pm10, co, no2, o3, so2);
+        Measurement result = new Measurement();
+        result.setLatitude(latitude);
+        result.setLongitude(longitude);
+        result.setAirQualityIndex(aqi);
+        result.setPm25(pm2_5);
+        result.setNh3(nh3);
+        result.setNo(no);
+        result.setPm10(pm10);
+        result.setCo(co);
+        result.setNo2(no2);
+        result.setO3(o3);
+        result.setSo2(so2);
+
+        return result;
     }
 }

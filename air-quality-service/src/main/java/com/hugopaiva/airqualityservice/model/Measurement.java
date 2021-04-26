@@ -39,41 +39,28 @@ public class Measurement {
     @Min(500)
     private Integer airQualityIndex;
 
-    @NotNull(message = "PM10 is mandatory")
     private Double pm10;
 
-    @NotNull(message = "CO is mandatory")
     private Double co;
 
-    @NotNull(message = "NO2 is mandatory")
     private Double no2;
 
-    @NotNull(message = "O3 is mandatory")
+    private Double nh3;
+
     private Double o3;
 
-    @NotNull(message = "SO2 is mandatory")
     private Double so2;
 
-    public Measurement(String location, Double latitude, Double longitude, Integer airQualityIndex, Double pm10, Double co, Double no2, Double o3, Double so2) {
-        this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.airQualityIndex = airQualityIndex;
-        this.pm10 = pm10;
-        this.co = co;
-        this.no2 = no2;
-        this.o3 = o3;
-        this.so2 = so2;
-    }
+    private Double no;
 
-    public Measurement(Double latitude, Double longitude, Integer airQualityIndex, Double pm10, Double co, Double no2, Double o3, Double so2) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.airQualityIndex = airQualityIndex;
-        this.pm10 = pm10;
-        this.co = co;
-        this.no2 = no2;
-        this.o3 = o3;
-        this.so2 = so2;
-    }
+    private Double pm25;
+
+    private Double temperature;
+
+    private Double wind;
+
+    private Double humidity;
+
+    private Double pressure;
+
 }
