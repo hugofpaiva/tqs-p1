@@ -1,4 +1,4 @@
-name: Spring Boot CI Tests
+name: Spring Boot CI Tests and Code Analysis
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: SonarQube Scan
-      uses: achilleslinux/sonarqube-action@master
+      uses: kitabisa/sonarqube-action@v1.1.0
       with:
         projectBaseDir: ./air-quality-service
         host: ${{ secrets.SONARQUBE_HOST }}
