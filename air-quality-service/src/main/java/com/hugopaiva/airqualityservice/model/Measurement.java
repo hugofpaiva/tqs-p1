@@ -3,6 +3,8 @@ package com.hugopaiva.airqualityservice.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +13,10 @@ import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Data
+@ToString
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
@@ -21,6 +25,9 @@ public class Measurement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @CreationTimestamp
+    private Date date;
 
     private String location;
 
