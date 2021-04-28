@@ -31,7 +31,7 @@ public class Cache {
     }
 
     public Measurement storeMeasurement(Measurement m){
-        return measurementRepository.save(m);
+        return measurementRepository.saveAndFlush(m);
     }
 
     @Scheduled(fixedRate = 60*1000)
