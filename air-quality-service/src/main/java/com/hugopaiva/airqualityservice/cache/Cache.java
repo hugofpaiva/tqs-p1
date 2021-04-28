@@ -17,7 +17,6 @@ public class Cache {
 
     private static final Logger log = LoggerFactory.getLogger(Cache.class);
     private int timeToLive; // in seconds
-    private static final int schedulerInterval = 60; // in seconds
 
     public Cache(int timeToLive) {
         this.timeToLive = timeToLive;
@@ -35,7 +34,7 @@ public class Cache {
         return measurementRepository.save(m);
     }
 
-    @Scheduled(fixedRate = this.schedulerInterval*1000)
+    @Scheduled(fixedRate = 60*1000)
     public void cleanExpiredCachedMeasurements(){
         log.info("Running scheduled method to clean expired cached measurements");
         Date mostRecentExpiredDate = new Date(System.currentTimeMillis()-this.timeToLive*1000);
@@ -43,7 +42,7 @@ public class Cache {
 
         for(Measurement m: expiredMeasurements){
             measurementRepository.delete(m);
-            log.info(String.format("Deleting expired Measurement: {}", m));
+            log.info("Deleting expired Measurement: {}", m);
         }
 
     }
