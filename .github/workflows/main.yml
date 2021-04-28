@@ -20,3 +20,14 @@ jobs:
     - name: Verify code executing each default lifecycle phase and IT tests
       run: mvn -B clean verify
       working-directory: ./air-quality-service
+  sonarQubeTrigger:
+    name: SonarQube Trigger
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: SonarQube Scan
+      uses: achilleslinux/sonarqube-action@master
+      with:
+        projectBaseDir: ./air-quality-service
+        host: ${{ secrets.SONARQUBE_HOST }}
+        login: ${{ secrets.SONARQUBE_TOKEN }}
