@@ -2,6 +2,7 @@ package com.hugopaiva.airqualityservice.cache;
 
 import com.hugopaiva.airqualityservice.model.Measurement;
 import com.hugopaiva.airqualityservice.repository.MeasurementRepository;
+import com.hugopaiva.airqualityservice.repository.RequestRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class Cache {
     @Autowired
     MeasurementRepository measurementRepository;
 
+    @Autowired
+    RequestRepository requestRepository;
+
     private static final Logger log = LoggerFactory.getLogger(Cache.class);
     private int timeToLive; // in seconds
 
@@ -27,11 +31,31 @@ public class Cache {
     }
 
     public Measurement getMeasurement(Double lat, Double lon){
-        return measurementRepository.findByLatitudeAndLongitude(lat, lon).orElse(null);
+        log.info("Getting Measurement for lat {} and lon {}", lat, lon);
+        Measurement m = measurementRepository.findByLatitudeAndLongitude(lat, lon).orElse(null);
+
+        if( m != null && hasExpired(m)){
+            deleteMeasurementFromCache(m);
+            return null;
+        }
+
+        return m;
     }
 
     public Measurement storeMeasurement(Measurement m){
+        log.info("Storing Measurement {} on cache", m);
         return measurementRepository.saveAndFlush(m);
+    }
+
+    public void deleteMeasurementFromCache(Measurement m){
+        log.info("Deleting Measurement {} from cache", m);
+        measurementRepository.delete(m);
+    }
+
+    public boolean hasExpired(Measurement m) {
+        log.info("Checking if Measurement {} is expired", m);
+        Date mostRecentExpiredDate = new Date(System.currentTimeMillis()-this.timeToLive*1000);
+        return m.getDate().before(mostRecentExpiredDate);
     }
 
     @Scheduled(fixedRate = 60*1000)

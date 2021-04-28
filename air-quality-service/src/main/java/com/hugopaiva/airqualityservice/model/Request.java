@@ -44,18 +44,16 @@ public class Request {
     @NotNull(message = "IP is mandatory")
     private URL ip;
 
-    public Request(CacheResponseState cacheResponse, Double latitude, Double longitude, URL ip) {
+    public Request(CacheResponseState cacheResponse, Double latitude, Double longitude) {
         this.cacheResponse = cacheResponse;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.ip = ip;
     }
 
-    public Request(CacheResponseState cacheResponse, String airQualityLocationAccessed, Double latitude, Double longitude, URL ip) {
+    public Request(CacheResponseState cacheResponse, String airQualityLocationAccessed, Double latitude, Double longitude) {
         this.cacheResponse = cacheResponse;
         this.airQualityLocationAccessed = airQualityLocationAccessed;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.ip = ip;
     }
 }
