@@ -41,9 +41,6 @@ public class Request {
     @Min(-180)
     private Double longitude;
 
-    @NotNull(message = "IP is mandatory")
-    private URL ip;
-
     public Request(CacheResponseState cacheResponse, Double latitude, Double longitude) {
         this.cacheResponse = cacheResponse;
         this.latitude = latitude;

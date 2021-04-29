@@ -17,6 +17,8 @@ public class MeasurementService {
 
     private static final Logger log = LoggerFactory.getLogger(MeasurementService.class);
 
+    private Cache cache = new Cache();
+
     @Autowired
     MeasurementRepository measurementRepository;
 
