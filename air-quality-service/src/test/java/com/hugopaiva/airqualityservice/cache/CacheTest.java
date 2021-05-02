@@ -43,9 +43,6 @@ class CacheTest {
     @InjectMocks
     Cache cache; // Using default 120 seconds of TTL
 
-    @InjectMocks
-    Cache spyCache = Mockito.spy(new Cache());
-
 
     @BeforeEach
     void setUp() {
@@ -88,6 +85,15 @@ class CacheTest {
         assertEquals(this.pm10, cacheMeasurement.getPm10());
         assertEquals(this.wind, cacheMeasurement.getWind());
         assertEquals(null, cacheMeasurement.getNo2());
+        assertEquals(null, cacheMeasurement.getNo());
+        assertEquals(null, cacheMeasurement.getCo());
+        assertEquals(null, cacheMeasurement.getNh3());
+        assertEquals(null, cacheMeasurement.getO3());
+        assertEquals(null, cacheMeasurement.getSo2());
+        assertEquals(null, cacheMeasurement.getTemperature());
+        assertEquals(null, cacheMeasurement.getHumidity());
+        assertEquals(null, cacheMeasurement.getPressure());
+
         verify(measurementRepository, times(1)).findByLatitudeAndLongitude(anyDouble(), anyDouble());
 
         verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.HIT, this.latitude, this.longitude));
@@ -129,6 +135,7 @@ class CacheTest {
 
     @Test
     void testScheduleCleaningCache() {
+        // The test of the @Schedule is on the main tests because of Spring Context
         this.date = new Date(System.currentTimeMillis() - 150 * 1000); // A date with more that 150 sec
         this.measurement.setDate(this.date);
         when(measurementRepository.findAllByDateIsLessThanEqual(any(Date.class)))
@@ -142,6 +149,39 @@ class CacheTest {
 
         verify(measurementRepository, times(1)).delete(this.measurement);
 
+        assertNull(cache.getMeasurement(this.latitude, this.longitude));
+
     }
+
+    @Test
+    void testHasExpiredValidMeasurement() {
+        assertFalse(cache.hasExpired(this.measurement));
+    }
+
+    @Test
+    void testHasExpiredInvalidMeasurement() {
+        this.date = new Date(System.currentTimeMillis() - 150 * 1000); // A date with more that 150 sec
+        this.measurement.setDate(this.date);
+        assertTrue(cache.hasExpired(this.measurement));
+    }
+
+    @Test
+    void testDeleteMeasurement() {
+        cache.deleteMeasurementFromCache(this.measurement);
+
+        verify(measurementRepository, times(1)).delete(this.measurement);
+
+    }
+
+    @Test
+    void testStoreMeasurement() {
+        when(measurementRepository.saveAndFlush(this.measurement)).thenReturn(this.measurement);
+
+        assertEquals(cache.storeMeasurement(this.measurement), this.measurement);
+
+        verify(measurementRepository, times(1)).saveAndFlush(this.measurement);
+
+    }
+
 
 }
