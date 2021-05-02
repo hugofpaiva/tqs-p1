@@ -43,8 +43,8 @@ public class Measurement {
     private Double longitude;
 
     @NotNull(message = "Air Quality Index is mandatory")
-    @Max(0)
-    @Min(500)
+    @Min(0)
+    @Max(500)
     private Integer airQualityIndex;
 
     private Double pm10;
