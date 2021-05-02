@@ -18,13 +18,14 @@ public class HttpClient {
 
     private static final Logger log = LoggerFactory.getLogger(HttpClient.class);
 
-    public String get(String url) throws IOException, APINotResponding {
+    public String get(String url) throws APINotResponding, IOException {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet request = new HttpGet(url);
 
         log.info("Requesting URL: {}", url);
 
         CloseableHttpResponse response = client.execute(request);
+
         try {
             HttpEntity entity = response.getEntity();
             return EntityUtils.toString(entity);

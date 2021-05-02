@@ -35,7 +35,7 @@ public class Cache {
     }
 
     public Measurement getMeasurement(Double lat, Double lon) {
-        log.info("Getting Measurement for lat {} and lon {}", lat, lon);
+        log.info("Getting Measurement for lat {} and lon {} in the cache", lat, lon);
         Measurement m = measurementRepository.findByLatitudeAndLongitude(lat, lon).orElse(null);
 
         if (m != null) {

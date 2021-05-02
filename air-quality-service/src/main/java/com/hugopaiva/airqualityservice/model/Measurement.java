@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -30,6 +27,10 @@ public class Measurement {
     private Date date;
 
     private String location;
+
+    @Enumerated(EnumType.ORDINAL)
+    @NotNull(message = "Response Source is mandatory")
+    private ResponseSource responseSource;
 
     @NotNull(message = "Latitude is mandatory")
     @Max(90)
