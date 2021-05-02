@@ -11,7 +11,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -59,7 +58,7 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
         Double no2 =  Double.valueOf(String.valueOf(components.get("no2")));
         Double o3 = Double.valueOf(String.valueOf(components.get("o3")));
         Double so2 =  Double.valueOf(String.valueOf(components.get("so2")));
-        Double pm2_5 =  Double.valueOf(String.valueOf(components.get("pm2_5")));
+        Double pm25 =  Double.valueOf(String.valueOf(components.get("pm2_5")));
         Double pm10 =  Double.valueOf(String.valueOf(components.get("pm10")));
         Double nh3 =  Double.valueOf(String.valueOf(components.get("nh3")));
 
@@ -67,7 +66,7 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
         result.setLatitude(latitude);
         result.setLongitude(longitude);
         result.setAirQualityIndex(aqi);
-        result.setPm25(pm2_5);
+        result.setPm25(pm25);
         result.setNh3(nh3);
         result.setNo(no);
         result.setPm10(pm10);
