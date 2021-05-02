@@ -35,18 +35,21 @@ public class Cache {
     }
 
     public Measurement getMeasurement(Double lat, Double lon) {
-        log.info("Getting Measurement for lat {} and lon {}", lat, lon);
+        log.info("Getting Measurement for lat {} and lon {} in the cache", lat, lon);
         Measurement m = measurementRepository.findByLatitudeAndLongitude(lat, lon).orElse(null);
 
         if (m != null) {
             if (hasExpired(m)) {
+                log.info("Measurement expired in the cache");
                 deleteMeasurementFromCache(m);
                 requestRepository.saveAndFlush(new Request(CacheResponseState.MISS, lat, lon));
                 return null;
             } else {
+                log.info("Measurement retrieved from cache");
                 requestRepository.saveAndFlush(new Request(CacheResponseState.HIT, lat, lon));
             }
         } else {
+            log.info("Measurement not found in the cache");
             requestRepository.saveAndFlush(new Request(CacheResponseState.MISS, lat, lon));
         }
 
@@ -54,8 +57,9 @@ public class Cache {
     }
 
     public Measurement storeMeasurement(Measurement m) {
-        log.info("Storing Measurement {} on cache", m);
-        return measurementRepository.saveAndFlush(m);
+        Measurement result = measurementRepository.saveAndFlush(m);
+        log.info("Stored Measurement {} on cache", result);
+        return result;
     }
 
     public void deleteMeasurementFromCache(Measurement m) {
