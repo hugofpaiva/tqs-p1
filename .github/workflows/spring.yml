@@ -1,4 +1,4 @@
-name: Spring Boot CI Tests and Code Analysis
+name: Spring Boot CI Tests
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    name: Running Java ${{ matrix.java }} Verify
+    name: Running Java ${{ matrix.java }} compile
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java 11
@@ -20,20 +20,14 @@ jobs:
     - name: Verify code executing each default lifecycle phase and IT tests
       run: mvn -B clean verify
       working-directory: ./air-quality-service
-  SonarScanner:
+  sonarQube:
+    name: SonarQube Scan
     runs-on: ubuntu-latest
-    name: Sonar Scanner
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Scan code
-        uses: vtex/action-sonarqube@main
-        run: mvn clean verify sonar:sonar -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          host: ${{ secrets.SONARQUBE_HOST }}
-          token: ${{ secrets.SONARQUBE_TOKEN }}
-          projectBaseDir: ./air-quality-service
-          working-directory: ./air-quality-service
+    - uses: actions/checkout@master
+    - name: SonarQube Scan
+      uses: kitabisa/sonarqube-action@v1.1.0
+      with:
+        host: ${{ secrets.SONARQUBE_HOST }}
+        login: ${{ secrets.SONARQUBE_TOKEN }}
+        projectBaseDir: ./air-quality-service
