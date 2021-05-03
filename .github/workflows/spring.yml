@@ -29,7 +29,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: mvn compile
+        run: mvn -B compile
+        working-directory: ./air-quality-service
       - name: Scan code
         uses: vtex/action-sonarqube@main
         with:
