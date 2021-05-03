@@ -20,14 +20,18 @@ jobs:
     - name: Verify code executing each default lifecycle phase and IT tests
       run: mvn -B clean verify
       working-directory: ./air-quality-service
-  sonarQubeTrigger:
-    name: SonarQube Trigger
+  SonarScanner:
     runs-on: ubuntu-latest
+    name: Sonar Scanner
     steps:
-    - uses: actions/checkout@master
-    - name: SonarQube Scan
-      uses: kitabisa/sonarqube-action@v1.1.0
-      with:
-        host: ${{ secrets.SONARQUBE_HOST }}
-        login: ${{ secrets.SONARQUBE_TOKEN }}
-        projectBaseDir: ./air-quality-service
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Scan code
+        uses: vtex/action-sonarqube@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          host: ${{ secrets.SONARQUBE_HOST }}
+          login: ${{ secrets.SONARQUBE_TOKEN }}
+          projectBaseDir: /air-quality-service
