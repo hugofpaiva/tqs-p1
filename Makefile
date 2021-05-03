@@ -2,15 +2,16 @@
 run-api: ## Run the Spring Boot server
 	cd air-quality-service && ./mvnw spring-boot:run
 
-.PHONY: test-api
-test-api: ## Run the Spring Boot tests
+.PHONY: run-web
+run-web: ## Run the Angular Web Application
+	cd web-application && npm install && npm run start
+
+.PHONY: tests
+tests: ## Run tests
 	cd air-quality-service && mvn test
 
-.PHONY: test
-test: test-api ## Run tests 
-
 .PHONY: dev
-dev: run-api ## Start all services in development mode
+dev: run-api run-web ## Start all services in development mode
 
 .PHONY: prod
 prod: ## Start all services containers in development mode
