@@ -9,7 +9,7 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    name: Running Java ${{ matrix.java }} compile
+    name: Running Java ${{ matrix.java }} Verify
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java 11
@@ -34,4 +34,4 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           host: ${{ secrets.SONARQUBE_HOST }}
           login: ${{ secrets.SONARQUBE_TOKEN }}
-          projectBaseDir: /air-quality-service
+          projectBaseDir: ./air-quality-service
