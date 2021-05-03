@@ -80,8 +80,8 @@ public class Cache {
         List<Measurement> expiredMeasurements = measurementRepository.findAllByDateIsLessThanEqual(mostRecentExpiredDate);
 
         for (Measurement m : expiredMeasurements) {
-            measurementRepository.delete(m);
             log.info("Deleting expired Measurement: {}", m);
+            measurementRepository.delete(m);
         }
 
     }
