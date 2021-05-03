@@ -3,16 +3,17 @@ package com.hugopaiva.airqualityservice.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Data
+@ToString
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
@@ -22,7 +23,14 @@ public class Measurement {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @CreationTimestamp
+    private Date date;
+
     private String location;
+
+    @Enumerated(EnumType.ORDINAL)
+    @NotNull(message = "Response Source is mandatory")
+    private ResponseSource responseSource;
 
     @NotNull(message = "Latitude is mandatory")
     @Max(90)
@@ -35,8 +43,8 @@ public class Measurement {
     private Double longitude;
 
     @NotNull(message = "Air Quality Index is mandatory")
-    @Max(0)
-    @Min(500)
+    @Min(0)
+    @Max(500)
     private Integer airQualityIndex;
 
     private Double pm10;

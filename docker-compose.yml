@@ -8,3 +8,9 @@ services:
       - 8080:8080
     restart: unless-stopped
     image: air-quality-service
+  angular:
+      build: ./web-application
+      container_name: air-quality-angular
+      restart: unless-stopped
+      ports:
+          - 80:80

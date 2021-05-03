@@ -9,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.net.URL;
 import java.util.Date;
 
 @Data
@@ -41,21 +40,16 @@ public class Request {
     @Min(-180)
     private Double longitude;
 
-    @NotNull(message = "IP is mandatory")
-    private URL ip;
-
-    public Request(CacheResponseState cacheResponse, Double latitude, Double longitude, URL ip) {
+    public Request(CacheResponseState cacheResponse, Double latitude, Double longitude) {
         this.cacheResponse = cacheResponse;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.ip = ip;
     }
 
-    public Request(CacheResponseState cacheResponse, String airQualityLocationAccessed, Double latitude, Double longitude, URL ip) {
+    public Request(CacheResponseState cacheResponse, String airQualityLocationAccessed, Double latitude, Double longitude) {
         this.cacheResponse = cacheResponse;
         this.airQualityLocationAccessed = airQualityLocationAccessed;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.ip = ip;
     }
 }

@@ -3,21 +3,25 @@ package com.hugopaiva.airqualityservice.resolver;
 import com.hugopaiva.airqualityservice.connection.HttpClient;
 import com.hugopaiva.airqualityservice.exception.APINotResponding;
 import com.hugopaiva.airqualityservice.model.Measurement;
+import com.hugopaiva.airqualityservice.model.ResponseSource;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.*;
 
 @Component
 public class AQICNMeasurementResolver implements MeasurementResolver{
+
+    private static final Logger log = LoggerFactory.getLogger(AQICNMeasurementResolver.class);
 
     @Autowired
     HttpClient httpClient;
@@ -26,23 +30,21 @@ public class AQICNMeasurementResolver implements MeasurementResolver{
     private Environment environments;
 
     @Override
-    public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotResponding, ParseException {
+    public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, APINotResponding, ParseException, IOException {
         URIBuilder uriBuilder = new URIBuilder("https://api.waqi.info/feed/geo:" +
                 (new Formatter()).format(Locale.US, "%.6f", latitude) +";"+
                 (new Formatter()).format(Locale.US, "%.6f", longitude)+"/");
         uriBuilder.addParameter("token", environments.getProperty("aqicn.api.key"));
 
-        System.out.println(uriBuilder.build().toString());
-
         String response = this.httpClient.get(uriBuilder.build().toString());
-
-        System.out.println(response);
 
         return JSONToMeasurement(response, latitude, longitude);
     }
 
     @Override
     public Measurement JSONToMeasurement(String data, Double latitude, Double longitude) throws ParseException {
+        log.info("Parsing response from AQICN API");
+
         Measurement result = new Measurement();
         JSONObject obj = (JSONObject) new JSONParser().parse(data);
         JSONObject content = (JSONObject) obj.get("data");
@@ -83,7 +85,7 @@ public class AQICNMeasurementResolver implements MeasurementResolver{
         Double wind =  iaqi.containsKey("w") ? Double.valueOf(String.valueOf(((JSONObject) iaqi.get("w")).get("v"))) : null;
         result.setWind(wind);
 
-        System.out.printf("co: %f no2: %f, lat: %f", co, no2, latitude);
+        result.setResponseSource(ResponseSource.AQICN);
 
         return result;
     }
