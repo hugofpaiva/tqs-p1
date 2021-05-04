@@ -21,9 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,15 +43,63 @@ class RequestServiceTest {
         Request r3 = new Request(CacheResponseState.HIT, 41.223212, 49.123321);
 
         List<Request> allRequests = Arrays.asList(r1, r2, r3);
-        Page<Request> pageRequest = new PageImpl(allRequests, PageRequest.of(1, 15), allRequests.size());
-
+        Page<Request> pageRequest = new PageImpl(allRequests, PageRequest.of(0, 10), allRequests.size());
 
         Mockito.when(requestRepository.findAll(any(Pageable.class))).thenReturn(pageRequest);
 
-        List<Request> found = requestService.getRequests(1, 15);
-        Mockito.verify(requestRepository, VerificationModeFactory.times(1)).findAll(any(Pageable.class));
+        List<Request> found = requestService.getRequests(0, 10);
+        Mockito.verify(requestRepository, VerificationModeFactory.times(1))
+                .findAll(any(Pageable.class));
         assertThat(found).hasSize(3).extracting(Request::getLatitude).contains(r1.getLatitude(), r2.getLatitude(),
                 r3.getLatitude());
+    }
+
+    @Test
+    public void testGivenNoRequests_whenGetRequests_thenReturn0Records() {
+        Page<Request> pageRequest = new PageImpl(new ArrayList<>(), PageRequest.of(0, 10), new ArrayList<>().size());
+
+        Mockito.when(requestRepository.findAll(any(Pageable.class))).thenReturn(pageRequest);
+
+        List<Request> found = requestService.getRequests(0, 10);
+        Mockito.verify(requestRepository, VerificationModeFactory.times(1))
+                .findAll(any(Pageable.class));
+        assertThat(found).hasSize(0);
+    }
+
+    @Test
+    public void testHaving3Requests_whenGetRequestsStats_thenReturnValidRequestsStats() {
+        Map<String, Long> requestsStats = new HashMap<>();
+        requestsStats.put("nRequests", 3L);
+        requestsStats.put("hits", 2L);
+        requestsStats.put("misses", 1L);
+
+        Mockito.when(requestRepository.count()).thenReturn(3L);
+        Mockito.when(requestRepository.countByCacheResponse(CacheResponseState.HIT)).thenReturn(2L);
+        Mockito.when(requestRepository.countByCacheResponse(CacheResponseState.MISS)).thenReturn(1L);
+
+        Map<String, Long> found = requestService.getRequestsStats();
+        Mockito.verify(requestRepository, VerificationModeFactory.times(1)).count();
+        Mockito.verify(requestRepository, VerificationModeFactory.times(2))
+                .countByCacheResponse(any(CacheResponseState.class));
+        assertThat(found).isEqualTo(requestsStats);
+    }
+
+    @Test
+    public void testHaving0Requests_whenGetRequestsStats_thenReturnValidRequestsStats() {
+        Map<String, Long> requestsStats = new HashMap<>();
+        requestsStats.put("nRequests", 0L);
+        requestsStats.put("hits", 0L);
+        requestsStats.put("misses", 0L);
+
+        Mockito.when(requestRepository.count()).thenReturn(0L);
+        Mockito.when(requestRepository.countByCacheResponse(CacheResponseState.HIT)).thenReturn(0L);
+        Mockito.when(requestRepository.countByCacheResponse(CacheResponseState.MISS)).thenReturn(0L);
+
+        Map<String, Long> found = requestService.getRequestsStats();
+        Mockito.verify(requestRepository, VerificationModeFactory.times(1)).count();
+        Mockito.verify(requestRepository, VerificationModeFactory.times(2))
+                .countByCacheResponse(any(CacheResponseState.class));
+        assertThat(found).isEqualTo(requestsStats);
     }
 
 }
