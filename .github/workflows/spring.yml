@@ -9,7 +9,7 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    name: Running Java ${{ matrix.java }} compile
+    name: Running Verify Lifecycle
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java 11
