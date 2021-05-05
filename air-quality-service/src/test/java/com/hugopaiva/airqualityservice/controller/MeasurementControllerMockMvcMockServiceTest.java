@@ -36,6 +36,9 @@ class MeasurementControllerMockMvcMockServiceTest {
                 .param("lon", String.valueOf(90.213212))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+
     }
 
     @Test

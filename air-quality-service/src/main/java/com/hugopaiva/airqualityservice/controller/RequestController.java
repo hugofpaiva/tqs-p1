@@ -1,5 +1,6 @@
 package com.hugopaiva.airqualityservice.controller;
 
+import com.hugopaiva.airqualityservice.exception.BadRequestException;
 import com.hugopaiva.airqualityservice.model.Request;
 import com.hugopaiva.airqualityservice.services.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,11 @@ public class RequestController {
     @GetMapping("/requests")
     public ResponseEntity<List<Request>> getRequests(
             @RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "10") Integer pageSize)
-    {
+            @RequestParam(defaultValue = "10") Integer pageSize) throws BadRequestException {
+        if (pageNo < 0 || pageSize <= 0){
+            throw new BadRequestException("Invalid parameters");
+        }
+
         List<Request> response = requestService.getRequests(pageNo, pageSize);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
