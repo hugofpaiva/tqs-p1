@@ -14,7 +14,7 @@ tests: ## Run tests
 dev: run-api run-web ## Start all services in development mode
 
 .PHONY: prod
-prod: ## Start all services containers in development mode
+prod: ## Start all services containers in production mode
 	 docker-compose build
 	 docker-compose up -d
 	
