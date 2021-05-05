@@ -1,5 +1,6 @@
 package com.hugopaiva.airqualityservice.controller;
 
+import com.hugopaiva.airqualityservice.exception.BadRequestException;
 import com.hugopaiva.airqualityservice.exception.ServiceUnavailableException;
 import com.hugopaiva.airqualityservice.model.Measurement;
 import com.hugopaiva.airqualityservice.services.MeasurementService;
@@ -17,7 +18,11 @@ public class MeasurementController {
     MeasurementService measurementService;
 
     @GetMapping("/actual-measurement")
-    public ResponseEntity<Measurement> getActualMeasurement(@RequestParam Double lat, @RequestParam Double lon) throws ServiceUnavailableException {
+    public ResponseEntity<Measurement> getActualMeasurement(@RequestParam Double lat, @RequestParam Double lon) throws ServiceUnavailableException, BadRequestException {
+        if (lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0){
+            throw new BadRequestException("Invalid parameters");
+        }
+
         Measurement response = measurementService.getActualMeasurementByLocation(lat, lon);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
