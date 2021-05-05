@@ -40,7 +40,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenInvalidValidLat_thenBadRequest() throws Exception {
-        mvc.perform(get("/api/actual-measurement")
+        mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(-182.903213))
                 .param("lon", String.valueOf(90.213212))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -49,7 +49,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenInvalidValidLon_thenBadRequest() throws Exception {
-        mvc.perform(get("/api/actual-measurement")
+        mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(-85.903213))
                 .param("lon", String.valueOf(185.213212))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -58,14 +58,14 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenNoParams_thenBadRequest() throws Exception {
-        mvc.perform(get("/api/actual-measurement")
+        mvc.perform(get("/actual-measurement")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void testWhenOnlyLat_thenBadRequest() throws Exception {
-        mvc.perform(get("/api/actual-measurement")
+        mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(52.435231))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -73,7 +73,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenOnlyLon_thenBadRequest() throws Exception {
-        mvc.perform(get("/api/actual-measurement")
+        mvc.perform(get("/actual-measurement")
                 .param("lon", String.valueOf(52.435231))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -83,16 +83,17 @@ class MeasurementControllerMockMvcIT {
     public void testHavingCache_thenStatus200() throws Exception {
         Measurement m = createTestMeasurement();
 
-        mvc.perform(get("/api/actual-measurement")
+        mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(m.getLatitude()))
                 .param("lon", String.valueOf(m.getLongitude()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("id", is(m.getId())))
-                .andExpect(jsonPath("date", is(m.getDate())))
+                .andExpect(jsonPath("id", is(m.getId().intValue())))
+                .andExpect(jsonPath("date", is(m.getDate().toInstant().toString()
+                        .substring(0, m.getDate().toInstant().toString().length() - 1)+"+00:00")))
                 .andExpect(jsonPath("location", is(m.getLocation())))
-                .andExpect(jsonPath("responseSource", is(m.getResponseSource())))
+                .andExpect(jsonPath("responseSource", is(m.getResponseSource().toString())))
                 .andExpect(jsonPath("latitude", is(m.getLatitude())))
                 .andExpect(jsonPath("longitude", is(m.getLongitude())))
                 .andExpect(jsonPath("airQualityIndex", is(m.getAirQualityIndex())))
@@ -113,21 +114,17 @@ class MeasurementControllerMockMvcIT {
     @Test
     public void testHavingNoCacheGettingFromAPI_thenStatus200() throws Exception {
         // Assuming the first API (AQICN) will respond
-        Measurement m = createTestMeasurement();
 
         Double latitude = 50.342123;
         Double longitude = 52.342123;
 
-        mvc.perform(get("/api/actual-measurement")
+        mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(latitude))
                 .param("lon", String.valueOf(longitude))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("id", is(any(Long.class))))
-                .andExpect(jsonPath("date", is(any(Date.class))))
-                .andExpect(jsonPath("location", is(m.getLocation())))
-                .andExpect(jsonPath("responseSource", is(ResponseSource.AQICN)))
+                .andExpect(jsonPath("responseSource", is(ResponseSource.AQICN.toString())))
                 .andExpect(jsonPath("latitude", is(latitude)))
                 .andExpect(jsonPath("longitude", is(longitude)))
                 .andExpect(jsonPath("airQualityIndex", is(any(Integer.class))));
