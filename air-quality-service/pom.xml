@@ -21,10 +21,7 @@
 		<swagger.version>3.0.0</swagger.version>
 		<spring.plugin.core.version>2.0.0.RELEASE</spring.plugin.core.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-		<junit-jupiter.version>5.7.1</junit-jupiter.version>
 		<selenium.version>3.4.0</selenium.version>
-		<hamcrest.version>2.2</hamcrest.version>
-		<mockito-core.version>3.3.3</mockito-core.version>
 		<jacoco.version>0.8.6</jacoco.version>
 	</properties>
 
