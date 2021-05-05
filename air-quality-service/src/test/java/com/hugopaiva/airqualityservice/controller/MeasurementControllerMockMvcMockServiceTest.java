@@ -4,6 +4,7 @@ import com.hugopaiva.airqualityservice.model.Measurement;
 import com.hugopaiva.airqualityservice.model.ResponseSource;
 import com.hugopaiva.airqualityservice.services.MeasurementService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,7 +15,7 @@ import java.util.Date;
 import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -44,6 +45,8 @@ class MeasurementControllerMockMvcMockServiceTest {
                 .param("lon", String.valueOf(185.213212))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -51,6 +54,9 @@ class MeasurementControllerMockMvcMockServiceTest {
         mvc.perform(get("/actual-measurement")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+
     }
 
     @Test
@@ -59,6 +65,9 @@ class MeasurementControllerMockMvcMockServiceTest {
                 .param("lat", String.valueOf(52.435231))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+
     }
 
     @Test
@@ -67,6 +76,9 @@ class MeasurementControllerMockMvcMockServiceTest {
                 .param("lon", String.valueOf(52.435231))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+
     }
 
     @Test
@@ -101,6 +113,9 @@ class MeasurementControllerMockMvcMockServiceTest {
                 .andExpect(jsonPath("wind", is(m.getWind())))
                 .andExpect(jsonPath("humidity", is(m.getHumidity())))
                 .andExpect(jsonPath("pressure", is(m.getPressure())));
+
+        verify(measurementService, times(1)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+
     }
 
 
@@ -119,4 +134,5 @@ class MeasurementControllerMockMvcMockServiceTest {
 
         return m;
     }
+
 }
