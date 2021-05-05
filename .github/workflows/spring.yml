@@ -9,7 +9,7 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    name: Running Verify Lifecycle
+    name: Running Java ${{ matrix.java }} compile
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java 11
@@ -31,5 +31,5 @@ jobs:
         distribution: 'adopt'
         java-version: '11'
     - name: Send code to SonarQube server and wait for quality gate
-      run: mvn -B clean verify sonar:sonar -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} #-Dsonar.qualitygate.wait=true
+      run: mvn -B clean verify sonar:sonar -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} -Dsonar.qualitygate.wait=true
       working-directory: ./air-quality-service
