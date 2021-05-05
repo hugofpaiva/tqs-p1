@@ -21,13 +21,15 @@ jobs:
       run: mvn -B clean verify
       working-directory: ./air-quality-service
   sonarQube:
-    name: SonarQube Scan
     runs-on: ubuntu-latest
+    name: SonarQube Code Analysis
     steps:
-    - uses: actions/checkout@master
-    - name: SonarQube Scan
-      uses: kitabisa/sonarqube-action@v1.1.0
+    - uses: actions/checkout@v2
+    - name: Set up Java 11
+      uses: actions/setup-java@v2
       with:
-        host: ${{ secrets.SONARQUBE_HOST }}
-        login: ${{ secrets.SONARQUBE_TOKEN }}
-        projectBaseDir: ./air-quality-service
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Send code to SonarQube server and wait for quality gate
+      run: -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }}:9000 -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} -Dsonar.qualitygate.wait=true
+      working-directory: ./air-quality-service
