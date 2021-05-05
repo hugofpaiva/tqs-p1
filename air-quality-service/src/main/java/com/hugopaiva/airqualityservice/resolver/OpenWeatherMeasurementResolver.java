@@ -36,8 +36,8 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
     public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotResponding, ParseException {
         URIBuilder uriBuilder = new URIBuilder("http://api.openweathermap.org/data/2.5/air_pollution");
         uriBuilder.addParameter("appid", environments.getProperty("openweathermap.api.key"));
-        uriBuilder.addParameter("lat", (new Formatter()).format(Locale.US, "%f", latitude).toString());
-        uriBuilder.addParameter("lon", (new Formatter()).format(Locale.US, "%f", longitude).toString());
+        uriBuilder.addParameter("lat", (new Formatter()).format(Locale.US, "%.6f", latitude).toString());
+        uriBuilder.addParameter("lon", (new Formatter()).format(Locale.US, "%.6f", longitude).toString());
 
         String response = this.httpClient.get(uriBuilder.build().toString());
 
