@@ -31,5 +31,5 @@ jobs:
         distribution: 'adopt'
         java-version: '11'
     - name: Send code to SonarQube server and wait for quality gate
-      run: mvn -B clean verify sonar:sonar -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }}:9000 -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} -Dsonar.qualitygate.wait=true
+      run: mvn -B clean verify sonar:sonar -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} -Dsonar.qualitygate.wait=true
       working-directory: ./air-quality-service
