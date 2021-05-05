@@ -25,6 +25,7 @@
 		<selenium.version>3.4.0</selenium.version>
 		<hamcrest.version>2.2</hamcrest.version>
 		<mockito-core.version>3.3.3</mockito-core.version>
+		<jacoco.version>0.8.6</jacoco.version>
 	</properties>
 
 	<dependencies>
@@ -172,6 +173,28 @@
 					<goal>verify</goal>
 				</goals>
 			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<!--attach the report goal of the JaCoCo plugin to the maven verify phase-->
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
