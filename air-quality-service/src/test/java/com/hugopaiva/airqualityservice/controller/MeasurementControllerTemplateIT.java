@@ -7,19 +7,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 import java.util.Random;
 
+
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
 public class MeasurementControllerTemplateIT {
 
@@ -37,79 +40,58 @@ public class MeasurementControllerTemplateIT {
         measurementRepository.deleteAll();
     }
 
-    /*
 
     @Test
-    public void testWhenInvalidValidLat_thenBadRequest() {
-        mvc.perform(get("/actual-measurement")
-                .param("lat", String.valueOf(-182.903213))
-                .param("lon", String.valueOf(90.213212))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+    public void testWhenInvalidLat_thenBadRequest() {
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-182.903213+"&lat="+90.213212, Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testWhenInvalidValidLon_thenBadRequest() {
-        mvc.perform(get("/actual-measurement")
-                .param("lat", String.valueOf(-85.903213))
-                .param("lon", String.valueOf(185.213212))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+    public void testWhenInvalidLon_thenBadRequest() {
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-85.903213+"&lat="+185.213212, Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
     public void testWhenNoParams_thenBadRequest() {
-        mvc.perform(get("/actual-measurement")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement", Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
     public void testWhenOnlyLat_thenBadRequest() {
-        mvc.perform(get("/actual-measurement")
-                .param("lat", String.valueOf(52.435231))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lat="+52.435231, Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
     public void testWhenOnlyLon_thenBadRequest() {
-        mvc.perform(get("/actual-measurement")
-                .param("lon", String.valueOf(52.435231))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lon="+52.435231, Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
     public void testHavingCache_thenStatus200() {
         Measurement m = createTestMeasurement();
 
-        mvc.perform(get("/actual-measurement")
-                .param("lat", String.valueOf(m.getLatitude()))
-                .param("lon", String.valueOf(m.getLongitude()))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("id", is(m.getId().intValue())))
-                .andExpect(jsonPath("date", is(m.getDate().toInstant().toString()
-                        .substring(0, m.getDate().toInstant().toString().length() - 1)+"+00:00")))
-                .andExpect(jsonPath("location", is(m.getLocation())))
-                .andExpect(jsonPath("responseSource", is(m.getResponseSource().toString())))
-                .andExpect(jsonPath("latitude", is(m.getLatitude())))
-                .andExpect(jsonPath("longitude", is(m.getLongitude())))
-                .andExpect(jsonPath("airQualityIndex", is(m.getAirQualityIndex())))
-                .andExpect(jsonPath("pm10", is(m.getPm10())))
-                .andExpect(jsonPath("co", is(m.getCo())))
-                .andExpect(jsonPath("no2", is(m.getNo2())))
-                .andExpect(jsonPath("nh3", is(m.getNh3())))
-                .andExpect(jsonPath("o3", is(m.getO3())))
-                .andExpect(jsonPath("so2", is(m.getSo2())))
-                .andExpect(jsonPath("no", is(m.getNo())))
-                .andExpect(jsonPath("pm25", is(m.getPm25())))
-                .andExpect(jsonPath("temperature", is(m.getTemperature())))
-                .andExpect(jsonPath("wind", is(m.getWind())))
-                .andExpect(jsonPath("humidity", is(m.getHumidity())))
-                .andExpect(jsonPath("pressure", is(m.getPressure())));
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lat="+m.getLatitude()+"&lon="+m.getLongitude(), Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+
+        assertThat(response.getBody(), equalTo(m));
+
     }
 
     @Test
@@ -119,16 +101,18 @@ public class MeasurementControllerTemplateIT {
         Double latitude = 50.342123;
         Double longitude = 52.342123;
 
-        mvc.perform(get("/actual-measurement")
-                .param("lat", String.valueOf(latitude))
-                .param("lon", String.valueOf(longitude))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("responseSource", is(ResponseSource.AQICN.toString())))
-                .andExpect(jsonPath("latitude", is(latitude)))
-                .andExpect(jsonPath("longitude", is(longitude)))
-                .andExpect(jsonPath("airQualityIndex", is(any(Integer.class))));
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lat="+latitude+"&lon="+longitude, Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+
+        Measurement responseMeasurement = response.getBody();
+
+        assertThat(responseMeasurement.getLatitude(), equalTo(latitude));
+        assertThat(responseMeasurement.getLongitude(), equalTo(longitude));
+        assertThat(responseMeasurement.getResponseSource(), equalTo(ResponseSource.AQICN));
+        assertThat(responseMeasurement.getAirQualityIndex(), is(any(Integer.class)));
+
     }
 
     private Measurement createTestMeasurement() {
@@ -147,6 +131,9 @@ public class MeasurementControllerTemplateIT {
         return measurementRepository.saveAndFlush(m);
     }
 
-     */
 
+    public String getBaseUrl() {
+        return "http://localhost:"+randomServerPort+"/api";
+
+    }
 }

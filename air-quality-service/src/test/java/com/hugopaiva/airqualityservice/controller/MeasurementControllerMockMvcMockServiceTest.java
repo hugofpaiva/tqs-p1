@@ -30,7 +30,7 @@ class MeasurementControllerMockMvcMockServiceTest {
     private MeasurementService measurementService;
 
     @Test
-    public void testWhenInvalidValidLat_thenBadRequest() throws Exception {
+    public void testWhenInvalidLat_thenBadRequest() throws Exception {
         mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(-182.903213))
                 .param("lon", String.valueOf(90.213212))
@@ -39,7 +39,7 @@ class MeasurementControllerMockMvcMockServiceTest {
     }
 
     @Test
-    public void testWhenInvalidValidLon_thenBadRequest() throws Exception {
+    public void testWhenInvalidLon_thenBadRequest() throws Exception {
         mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(-85.903213))
                 .param("lon", String.valueOf(185.213212))
