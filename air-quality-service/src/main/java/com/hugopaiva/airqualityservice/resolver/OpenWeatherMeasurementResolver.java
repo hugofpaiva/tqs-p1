@@ -41,11 +41,11 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
 
         String response = this.httpClient.get(uriBuilder.build().toString());
 
-        return JSONToMeasurement(response, latitude, longitude);
+        return jsonToMeasurement(response, latitude, longitude);
     }
 
     @Override
-    public Measurement JSONToMeasurement(String data, Double latitude, Double longitude) throws ParseException {
+    public Measurement jsonToMeasurement(String data, Double latitude, Double longitude) throws ParseException {
         log.info("Parsing response from Open Weather API");
 
         JSONObject obj = (JSONObject) new JSONParser().parse(data);
