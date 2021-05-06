@@ -14,6 +14,7 @@ import java.util.Date;
 
 @Data
 @ToString
+@EqualsAndHashCode
 @Entity
 @NoArgsConstructor
 public class Measurement {

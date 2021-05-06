@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
+@EqualsAndHashCode
 @Entity
 @NoArgsConstructor
 public class Request {
