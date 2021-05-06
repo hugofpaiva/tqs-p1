@@ -41,6 +41,9 @@ class CacheTest {
     @InjectMocks
     Cache cache; // Using default 120 seconds of TTL
 
+    @InjectMocks
+    Cache cache60sec = new Cache(60);
+
 
     @BeforeEach
     void setUp() {
@@ -114,7 +117,7 @@ class CacheTest {
 
     @Test
     void testGetExpiredMeasurement() {
-        this.date = new Date(System.currentTimeMillis() - 150 * 1000); // A date with more that 150 sec
+        this.date = new Date(System.currentTimeMillis() - 125 * 1000); // A date with more that 120 sec
         this.measurement.setDate(this.date);
         when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
                 .thenReturn(Optional.of(this.measurement));
@@ -132,9 +135,28 @@ class CacheTest {
     }
 
     @Test
+    void testGetExpiredMeasurementOnDifferentCache() {
+        this.date = new Date(System.currentTimeMillis() - 65 * 1000); // A date with more that 60 sec
+        this.measurement.setDate(this.date);
+        when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
+                .thenReturn(Optional.of(this.measurement));
+
+        Measurement cacheMeasurement = this.cache60sec.getMeasurement(this.latitude, this.longitude);
+
+        assertNull(cacheMeasurement);
+
+        verify(measurementRepository, times(1)).findByLatitudeAndLongitude(anyDouble(), anyDouble());
+        verify(measurementRepository, times(1)).delete(this.measurement);
+
+
+        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS, this.latitude, this.longitude));
+
+    }
+
+    @Test
     void testScheduleCleaningCache() {
         // The test of the @Schedule is on the main tests because of Spring Context
-        this.date = new Date(System.currentTimeMillis() - 150 * 1000); // A date with more that 150 sec
+        this.date = new Date(System.currentTimeMillis() - 125 * 1000); // A date with more that 120 sec
         this.measurement.setDate(this.date);
         when(measurementRepository.findAllByDateIsLessThanEqual(any(Date.class)))
                 .thenReturn(new ArrayList<>(Arrays.asList(
@@ -158,7 +180,7 @@ class CacheTest {
 
     @Test
     void testHasExpiredInvalidMeasurement() {
-        this.date = new Date(System.currentTimeMillis() - 150 * 1000); // A date with more that 150 sec
+        this.date = new Date(System.currentTimeMillis() - 125 * 1000); // A date with more that 120 sec
         this.measurement.setDate(this.date);
         assertTrue(cache.hasExpired(this.measurement));
     }
