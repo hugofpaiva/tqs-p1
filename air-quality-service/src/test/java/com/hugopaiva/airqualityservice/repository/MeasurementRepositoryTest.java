@@ -41,7 +41,7 @@ class MeasurementRepositoryTest {
 
         Optional<Measurement> found = measurementRepository.findByLatitudeAndLongitude(m.getLatitude(), m.getLongitude());
         assertThat(found).isNotNull();
-        assertThat(found.get().equals(m));
+        assertThat(found.get()).isEqualTo(m);
     }
 
     @Test
