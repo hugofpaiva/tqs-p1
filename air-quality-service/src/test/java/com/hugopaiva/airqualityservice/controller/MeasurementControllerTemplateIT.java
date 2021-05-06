@@ -42,7 +42,7 @@ public class MeasurementControllerTemplateIT {
 
 
     @Test
-    public void testWhenInvalidLat_thenBadRequest() {
+    public void testWhenInvalidLatMin_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
                 getForEntity(getBaseUrl() + "/actual-measurement?lat="+-182.903213+"&lat="+90.213212, Measurement.class);
 
@@ -50,7 +50,23 @@ public class MeasurementControllerTemplateIT {
     }
 
     @Test
-    public void testWhenInvalidLon_thenBadRequest() {
+    public void testWhenInvalidLatMax_thenBadRequest() {
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lat="+91.903213+"&lat="+90.213212, Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+    }
+
+    @Test
+    public void testWhenInvalidLonMin_thenBadRequest() {
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-85.903213+"&lat="+-185.213212, Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+    }
+
+    @Test
+    public void testWhenInvalidLonMax_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
                 getForEntity(getBaseUrl() + "/actual-measurement?lat="+-85.903213+"&lat="+185.213212, Measurement.class);
 
