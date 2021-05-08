@@ -1,4 +1,4 @@
-<div class="panel-header panel-header-lg" style="height: 100vh; display: flex; flex-direction: column; justify-content: space-around">
+<div class="panel-header panel-header-lg" style="height: 100%; display: flex; flex-direction: column; justify-content: space-around; padding-bottom: 125px">
     <div class="row" style="display: flex; justify-content: space-around">
         <div class="col-md-3">
             <div class="card">
@@ -68,7 +68,7 @@
                                     {{request.id}}
                                 </td>
                                 <td>
-                                    {{request.date | date:'short'}}
+                                    {{request.date | date:'medium'}}
                                 </td>
                                 <td>
                                     {{request.cacheResponse}}

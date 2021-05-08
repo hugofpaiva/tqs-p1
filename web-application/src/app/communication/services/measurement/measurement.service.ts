@@ -12,7 +12,7 @@ export class MeasurementService {
   constructor(private http: HttpClient) { }
 
   getMeasurement(lat: number, lon: number): Observable<Measurement> {
-    const url = environment.baseURL + 'actual-measurement?lat='+lat+"&lon="+lon;
+    const url = environment.baseURL + 'actual-measurement?lat=' + lat + '&lon=' + lon;
     return this.http.get<Measurement>(url);
   }
 

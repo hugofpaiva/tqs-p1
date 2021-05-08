@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as Chartist from 'chartist';
+import {MeasurementService} from '../communication/services/measurement/measurement.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,9 +8,17 @@ import * as Chartist from 'chartist';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private measurementService: MeasurementService) { }
 
   ngOnInit() {
-
+    this.getActualMeasurement(40.666666, 32.543546);
   }
+
+
+  getActualMeasurement(lat: number, long: number ): void {
+    this.measurementService.getMeasurement(lat, long).subscribe(measurement => {
+      console.log(measurement);
+    });
+  }
+
 }
