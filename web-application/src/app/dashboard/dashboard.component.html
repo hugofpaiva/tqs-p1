@@ -1,77 +1,121 @@
 <div class="panel-header panel-header-lg"
      style=" display: flex; flex-direction: column; justify-content: space-around; padding-top: 0px">
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-5" style="display: flex;justify-content: center"><h3 style="color: white;">Search by
-            Coordinates</h3></div>
-        <div class="col-md-4"
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-3" style="display: flex; justify-content: space-around">
+            <div class="form-group">
+                <select class="form-control" style="background-color: white"
+                        (change)="selectSearchType($event.target.value)" required>
+                    <option value="Coordinates" selected>Search by Coordinates</option>
+                    <option value="Location">Search by Location</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-3"
              style="width: 400px; display: flex; justify-content: space-around; flex-direction: column">
             <h4 style="color: white; text-align: center; margin-top: 0px">Source</h4>
             <div style="display: flex; justify-content: space-around">
-                <a href="https://openweathermap.org/api"><img height="50px" [ngStyle]="{'opacity':measurement.responseSource == 'OPENWEATHER' ? 1 : 0.2 }"
+                <a href="https://openweathermap.org/api"><img height="50px"
+                                                              [ngStyle]="{'opacity':measurement === undefined ? 0.5 : (measurement.responseSource == 'OPENWEATHER' ? 1 : 0.2) }"
                                                               src="/assets/img/logo-open-weather.png"></a>
-                <a href="https://aqicn.org/api/"><img height="50px" [ngStyle]="{'opacity':measurement.responseSource == 'AQICN' ? 1 : 0.2 }"
+                <a href="https://aqicn.org/api/"><img height="50px"
+                                                      [ngStyle]="{'opacity':measurement === undefined ? 0.5 : (measurement.responseSource == 'AQICN' ? 1 : 0.2) }"
                                                       src="/assets/img/logo-aqicn.png"></a>
             </div>
         </div>
     </div>
-    <div class="row" style="display: flex; justify-content: space-around">
-        <div class="col-md-3">
-            <div class="card" style="display: flex; flex-direction: row">
-                <div class="col-md-8">
-                    <div class="card-header">
-                        <h4 class="card-title">Hits</h4>
-                    </div>
-                    <div class="card-body">
+    <div style="display: flex; justify-content: center">
+        <div class="col-md-5">
+            <div class="card" style="display: flex; flex-direction: row; height: 225px">
+                <div class="card-body">
+                    <h3 style="text-align: center; margin-bottom: 15px">Search by
+                        {{selectedSearch}}</h3>
+                    <div *ngIf="selectedSearch === 'Coordinates'">
+                        <form [formGroup]="coordinatesForm"
+                              (ngSubmit)="getActualMeasurement(requestCoordinates.latitude, requestCoordinates.longitude)">
+                            <div class="modal-body"
+                                 style="display: flex; justify-content: space-around; align-items: center">
 
+                                <div style="width: 25%" class="form-group">
+                                    <label>Latitude</label>
+                                    <input #latitude type="number" (click)="errorsCheck()" [(ngModel)]="requestCoordinates.latitude"
+                                           formControlName="latitude" class="form-control"
+                                           [ngClass]="{ 'is-invalid': f.latitude.errors && checkFormErrors }"/>
+                                    <div *ngIf=" !requested && f.latitude.errors && checkFormErrors" class="invalid-feedback">
+                                        <div *ngIf=" !requested && f.latitude.errors && checkFormErrors">Latitude must be between -90 and
+                                            90
+                                            with 6 decimals
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="width: 25%" class="form-group">
+                                    <label>Longitude</label>
+                                    <input #longitude type="number" (click)="errorsCheck()" [(ngModel)]="requestCoordinates.longitude"
+                                           formControlName="longitude" class="form-control"
+                                           [ngClass]="{ 'is-invalid': f.longitude.errors && checkFormErrors }"/>
+                                    <div *ngIf=" !requested && f.longitude.errors && checkFormErrors" class="invalid-feedback">
+                                        <div *ngIf=" !requested && f.longitude.errors && checkFormErrors">Longitude must be between -180
+                                            and
+                                            180 with 6 decimals
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <button [disabled]="requested
+      || f.latitude.errors || f.longitude.errors"
+                                        type="submit" rounded="true"
+                                        style="border-radius: 50%; height: 40px; width: 25px; display: flex; justify-content: center; align-items: center"
+                                        class="btn btn-info"><i class="fas fa-search"></i></button>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div *ngIf="selectedSearch === 'Location'">
+                        <form [formGroup]="locationForm"
+                              (ngSubmit)="getActualMeasurement(requestCoordinates.latitude, requestCoordinates.longitude)">
+                            <div class="modal-body"
+                                 style="display: flex; justify-content: space-around; align-items: center">
+
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <input style="width: 350px" #location (click)="errorsCheck()" type="text" [(ngModel)]="requestLocation.location"
+                                           formControlName="location" class="form-control"
+                                           [ngClass]="{ 'is-invalid': l.location.errors && checkFormErrors }"/>
+                                    <div *ngIf=" !requested && l.location.errors && checkFormErrors" class="invalid-feedback">
+                                        <div *ngIf=" !requested && l.longitude.required && checkFormErrors">Location is required
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <button [disabled]="requested
+      || l.location.errors "
+                                        type="submit" rounded="true"
+                                        style="border-radius: 50%; height: 40px; width: 25px; display: flex; justify-content: center; align-items: center"
+                                        class="btn btn-info"><i class="fas fa-search"></i></button>
+
+                            </div>
+                        </form>
                     </div>
                 </div>
-
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card" style="display: flex; flex-direction: row">
-                <div class="col-md-8">
-                    <div class="card-header">
-                        <h4 class="card-title">Total Requests</h4>
-                    </div>
-                    <div class="card-body">
 
-                    </div>
-                </div>
-                <div class="col-md-4" style="display: flex; align-items: center; justify-content: center">
-                    <i style="color: #52A8F8" class="fas fa-globe fa-3x"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card" style="display: flex; flex-direction: row">
-                <div class="col-md-8">
-                    <div class="card-header">
-                        <h4 class="card-title">Misses</h4>
-                    </div>
-                    <div class="card-body">
-
-                    </div>
-                </div>
-                <div class="col-md-4" style="display: flex; align-items: center; justify-content: center">
-                    <i style="color: #EB4A41" class="fas fa-window-close fa-3x"></i>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
 <div *ngIf="measurement" class="main-content">
     <div class="row" style="display: flex; justify-content: space-around">
-            <div class="card col-md-3">
-                <div class="card-header">
-                    <h3 class="card-title">Measurement Date</h3>
-                </div>
-                <div class="card-body" style="display: flex; justify-content: space-around">
-                    <i class="far fa-clock fa-2x"></i>  <h5>{{measurement.date | date:'short'}}</h5>
-                </div>
+        <div class="card col-md-3">
+            <div class="card-header">
+                <h3 class="card-title">Measurement Date</h3>
             </div>
+            <div class="card-body" style="display: flex; justify-content: space-around">
+                <i class="far fa-clock fa-2x"></i>  <h5>{{measurement.date | date:'short'}}</h5>
+            </div>
+        </div>
 
         <div class="card col-md-3">
             <div class="card-header">
@@ -87,18 +131,21 @@
                 <h3 class="card-title">Temperature</h3>
             </div>
             <div class="card-body" style="display: flex; justify-content: space-around">
-                <i class="fas fa-thermometer-half fa-2x"></i>  <h5>{{((measurement.temperature === null) ? '--' : measurement.temperature + 'ºC')}}</h5>
+                <i class="fas fa-thermometer-half fa-2x"></i>
+                <h5>{{((measurement.temperature === null) ? '--' : measurement.temperature + 'ºC')}}</h5>
             </div>
         </div>
     </div>
 
-    <div *ngIf="measurement.responseSource == 'AQICN'" class="row" style="display: flex; justify-content: space-around">
+    <div *ngIf="measurement.responseSource == 'AQICN'" class="row"
+         style="display: flex; justify-content: space-around">
         <div *ngFor="let value of valuesLine3.keys()" class="card col-md-3">
             <div class="card-header">
                 <h3 class="card-title">{{value | titlecase}}</h3>
             </div>
             <div class="card-body" style="display: flex; justify-content: space-around">
-                <i class="far fa-clock fa-2x"></i>  <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine3.get(value))}}</h5>
+                <i class="far fa-clock fa-2x"></i>
+                <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine3.get(value))}}</h5>
             </div>
         </div>
     </div>
@@ -125,5 +172,12 @@
         </div>
     </div>
 
+
 </div>
+
+<div class="main-content">
+    <h2>Loading...</h2>
+</div>
+
+
 

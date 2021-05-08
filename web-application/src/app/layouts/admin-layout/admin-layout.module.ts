@@ -19,7 +19,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
         ChartsModule,
         NgbModule,
         ToastrModule.forRoot(),
-        NgxPaginationModule
+        NgxPaginationModule,
+        ReactiveFormsModule
     ],
   declarations: [
     DashboardComponent,
