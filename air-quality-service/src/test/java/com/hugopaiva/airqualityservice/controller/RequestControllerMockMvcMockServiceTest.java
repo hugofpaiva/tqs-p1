@@ -100,6 +100,7 @@ class RequestControllerMockMvcMockServiceTest {
         requests.add(createTestRequest());
         requests.add(createTestRequest());
         requests.add(createTestRequest());
+        Collections.reverse(requests);
 
         List<Double> requestsLat = requests.stream()
                 .map(Request::getLatitude)

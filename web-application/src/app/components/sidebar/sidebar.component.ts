@@ -7,15 +7,9 @@ declare interface RouteInfo {
     class: string;
 }
 export const ROUTES: RouteInfo[] = [
-    { path: '/dashboard', title: 'Dashboard',  icon: 'design_app', class: '' },
-    { path: '/icons', title: 'Icons',  icon:'education_atom', class: '' },
-    { path: '/maps', title: 'Maps',  icon:'location_map-big', class: '' },
-    { path: '/notifications', title: 'Notifications',  icon:'ui-1_bell-53', class: '' },
-
-    { path: '/user-profile', title: 'User Profile',  icon:'users_single-02', class: '' },
-    { path: '/table-list', title: 'Table List',  icon:'design_bullet-list-67', class: '' },
-    { path: '/typography', title: 'Typography',  icon:'text_caps-small', class: '' },
-    { path: '/upgrade', title: 'Upgrade to PRO',  icon:'objects_spaceship', class: 'active active-pro' }
+    { path: '/actual-measurement', title: 'Actual Measurements',  icon: 'fas fa-street-view', class: '' },
+    { path: '/cache', title: 'Cache',  icon: 'fas fa-history', class: '' },
+    { path: '/user-profile', title: 'User Profile',  icon: 'now-ui-icons users_single-02', class: '' },
 
 ];
 
@@ -37,5 +31,5 @@ export class SidebarComponent implements OnInit {
           return false;
       }
       return true;
-  };
+  }
 }

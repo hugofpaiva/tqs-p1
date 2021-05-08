@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -52,6 +53,7 @@ class RequestControllerMockMvcIT {
         savedRequests.add(r1);
         savedRequests.add(r2);
         savedRequests.add(r3);
+        Collections.reverse(savedRequests);
     }
 
     @AfterEach
