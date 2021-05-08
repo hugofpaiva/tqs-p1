@@ -1,19 +1,19 @@
 
-<div class="logo">
-    <a href="https://www.creative-tim.com" class="simple-text logo-mini">
-      <div class="logo-img">
-          <img src="./assets/img/angular2-logo-white.png"/>
+<div class="logo" >
+    <a class="simple-text logo-mini" >
+      <div class="logo-img" style="display: flex; align-items:center">
+          <i class="fas fa-leaf fa-2x"></i>
       </div>
     </a>
-    <a href="https://www.creative-tim.com" class="simple-text logo-normal">
-        Creative Tim
+    <a class="simple-text logo-normal">
+        Air Quality
     </a>
 </div>
 <div class="sidebar-wrapper">
     <ul class="nav">
         <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
             <a [routerLink]="[menuItem.path]">
-                <i class="now-ui-icons {{menuItem.icon}}"></i>
+                <i class="{{menuItem.icon}}"></i>
                 <p>{{menuItem.title}}</p>
             </a>
         </li>

@@ -12,6 +12,7 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
     RouterModule,
     AppRoutingModule,
     NgbModule,
+    NgxPaginationModule,
     ToastrModule.forRoot()
   ],
   declarations: [
