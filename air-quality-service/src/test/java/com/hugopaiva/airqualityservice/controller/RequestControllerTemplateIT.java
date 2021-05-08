@@ -50,6 +50,7 @@ public class RequestControllerTemplateIT {
         savedRequests.add(r1);
         savedRequests.add(r2);
         savedRequests.add(r3);
+        Collections.reverse(savedRequests);
     }
 
     @AfterEach
