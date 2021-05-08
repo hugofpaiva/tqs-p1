@@ -11,5 +11,5 @@ public interface MeasurementResolver {
 
     public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotResponding, ParseException;
 
-    public Measurement JSONToMeasurement(String data, Double latitude, Double longitude) throws ParseException;
+    public Measurement jsonToMeasurement(String data, Double latitude, Double longitude) throws ParseException;
 }

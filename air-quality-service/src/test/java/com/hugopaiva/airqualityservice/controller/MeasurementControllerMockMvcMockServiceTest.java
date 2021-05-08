@@ -30,16 +30,42 @@ class MeasurementControllerMockMvcMockServiceTest {
     private MeasurementService measurementService;
 
     @Test
-    public void testWhenInvalidValidLat_thenBadRequest() throws Exception {
+    public void testWhenInvalidLatMin_thenBadRequest() throws Exception {
         mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(-182.903213))
                 .param("lon", String.valueOf(90.213212))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+
     }
 
     @Test
-    public void testWhenInvalidValidLon_thenBadRequest() throws Exception {
+    public void testWhenInvalidLatMax_thenBadRequest() throws Exception {
+        mvc.perform(get("/actual-measurement")
+                .param("lat", String.valueOf(91.903213))
+                .param("lon", String.valueOf(90.213212))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+
+    }
+
+    @Test
+    public void testWhenInvalidLonMin_thenBadRequest() throws Exception {
+        mvc.perform(get("/actual-measurement")
+                .param("lat", String.valueOf(-85.903213))
+                .param("lon", String.valueOf(-185.213212))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(measurementService, times(0)).getActualMeasurementByLocation(Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    public void testWhenInvalidLonMax_thenBadRequest() throws Exception {
         mvc.perform(get("/actual-measurement")
                 .param("lat", String.valueOf(-85.903213))
                 .param("lon", String.valueOf(185.213212))

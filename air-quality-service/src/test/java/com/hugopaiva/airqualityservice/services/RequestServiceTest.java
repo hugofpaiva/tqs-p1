@@ -3,17 +3,11 @@ package com.hugopaiva.airqualityservice.services;
 import com.hugopaiva.airqualityservice.model.CacheResponseState;
 import com.hugopaiva.airqualityservice.model.Request;
 import com.hugopaiva.airqualityservice.repository.RequestRepository;
-import com.hugopaiva.airqualityservice.resolver.AQICNMeasurementResolver;
-import com.hugopaiva.airqualityservice.resolver.OpenWeatherMeasurementResolver;
-import org.bouncycastle.cert.ocsp.Req;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Any;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -63,7 +57,25 @@ class RequestServiceTest {
         List<Request> found = requestService.getRequests(0, 10);
         Mockito.verify(requestRepository, VerificationModeFactory.times(1))
                 .findAll(any(Pageable.class));
-        assertThat(found).hasSize(0);
+        assertThat(found).isEmpty();
+    }
+
+    @Test
+    public void testWhenGetInvalidPageNo_thenThrow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            requestService.getRequests(-1, 10);
+        });
+        Mockito.verify(requestRepository, VerificationModeFactory.times(0))
+                .findAll(any(Pageable.class));
+    }
+
+    @Test
+    public void testWhenGetInvalidPageSize_thenThrow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            requestService.getRequests(0, 0);
+        });
+        Mockito.verify(requestRepository, VerificationModeFactory.times(0))
+                .findAll(any(Pageable.class));
     }
 
     @Test
