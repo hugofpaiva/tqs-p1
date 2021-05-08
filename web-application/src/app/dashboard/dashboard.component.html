@@ -1,11 +1,17 @@
 <div class="panel-header panel-header-lg"
      style=" display: flex; flex-direction: column; justify-content: space-around; padding-top: 0px">
-    <div style="display: flex; justify-content: flex-end">
-        <div style="width: 400px; display: flex; justify-content: space-around; flex-direction: column">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-5" style="display: flex;justify-content: center"><h3 style="color: white;">Search by
+            Coordinates</h3></div>
+        <div class="col-md-4"
+             style="width: 400px; display: flex; justify-content: space-around; flex-direction: column">
             <h4 style="color: white; text-align: center; margin-top: 0px">Source</h4>
             <div style="display: flex; justify-content: space-around">
-                <a href="https://openweathermap.org/api"><img height="50px" style="opacity: 0.2" src="/assets/img/logo-open-weather.png"></a>
-                <a href="https://aqicn.org/api/"><img height="50px" style="opacity: 0.2" src="/assets/img/logo-aqicn.png"></a>
+                <a href="https://openweathermap.org/api"><img height="50px" [ngStyle]="{'opacity':measurement.responseSource == 'OPENWEATHER' ? 1 : 0.2 }"
+                                                              src="/assets/img/logo-open-weather.png"></a>
+                <a href="https://aqicn.org/api/"><img height="50px" [ngStyle]="{'opacity':measurement.responseSource == 'AQICN' ? 1 : 0.2 }"
+                                                      src="/assets/img/logo-aqicn.png"></a>
             </div>
         </div>
     </div>
@@ -20,9 +26,7 @@
 
                     </div>
                 </div>
-                <div class="col-md-4" style="display: flex; align-items: center; justify-content: center">
-                    <i style="color: #93D16E" class="fas fa-check fa-3x"></i>
-                </div>
+
             </div>
         </div>
         <div class="col-md-3">
@@ -56,11 +60,70 @@
             </div>
         </div>
     </div>
-
 </div>
 
-<div class="main-content">
+<div *ngIf="measurement" class="main-content">
+    <div class="row" style="display: flex; justify-content: space-around">
+            <div class="card col-md-3">
+                <div class="card-header">
+                    <h3 class="card-title">Measurement Date</h3>
+                </div>
+                <div class="card-body" style="display: flex; justify-content: space-around">
+                    <i class="far fa-clock fa-2x"></i>  <h5>{{measurement.date | date:'short'}}</h5>
+                </div>
+            </div>
 
+        <div class="card col-md-3">
+            <div class="card-header">
+                <h3 class="card-title">Air Quality Index</h3>
+            </div>
+            <div class="card-body" style="display: flex; justify-content: space-around">
+                <i class="fab fa-envira fa-2x"></i>  <h5>{{measurement.airQualityIndex}}</h5>
+            </div>
+        </div>
+
+        <div class="card col-md-3">
+            <div class="card-header">
+                <h3 class="card-title">Temperature</h3>
+            </div>
+            <div class="card-body" style="display: flex; justify-content: space-around">
+                <i class="fas fa-thermometer-half fa-2x"></i>  <h5>{{((measurement.temperature === null) ? '--' : measurement.temperature + 'ºC')}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="measurement.responseSource == 'AQICN'" class="row" style="display: flex; justify-content: space-around">
+        <div *ngFor="let value of valuesLine3.keys()" class="card col-md-3">
+            <div class="card-header">
+                <h3 class="card-title">{{value | titlecase}}</h3>
+            </div>
+            <div class="card-body" style="display: flex; justify-content: space-around">
+                <i class="far fa-clock fa-2x"></i>  <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine3.get(value))}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="display: flex; justify-content: space-around">
+        <div *ngFor="let value of valuesLine1.keys()" class="card col-md-2">
+            <div class="card-header">
+                <h3 class="card-title">{{value | uppercase}}</h3>
+            </div>
+            <div class="card-body" style="display: flex; justify-content: space-around">
+                <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine1.get(value))}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="display: flex; justify-content: space-around">
+        <div *ngFor="let value of valuesLine2.keys()" class="card col-md-2">
+            <div class="card-header">
+                <h3 class="card-title">{{value | uppercase}}</h3>
+            </div>
+            <div class="card-body" style="display: flex; justify-content: space-around">
+                <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine2.get(value))}}</h5>
+            </div>
+        </div>
+    </div>
 
 </div>
 
