@@ -13,15 +13,16 @@ import {NgxSpinnerService} from 'ngx-spinner';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  private measurement: Measurement;
+  measurement: Measurement;
   private requested = false;
-  private error = false;
+  error = false;
   private checkFormErrors = false;
   private valuesLine1: Map<String, String> = new Map([['co', 'g'], ['no', 'f'], ['no2', 'f'], ['o3', 'f']]);
   private valuesLine2: Map<String, String> = new Map([['so2', 'g'], ['pm25', 'f'], ['pm10', 'f'], ['nh3', 'f']]);
   private valuesLine3: Map<String, String[]> = new Map([['wind', ['g', 'fas fa-paper-plane']], ['humidity', ['g', 'fas fa-tint']],
     ['pressure', ['g', 'fas fa-tachometer-alt']]]);
-  private selectedSearch: String = 'Coordinates';
+
+  selectedSearch: String = 'Coordinates';
 
   @Input() requestCoordinates: RequestCoordinates = new RequestCoordinates();
   @Input() requestLocation: RequestLocation = new RequestLocation();
