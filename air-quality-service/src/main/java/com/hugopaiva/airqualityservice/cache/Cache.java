@@ -57,8 +57,15 @@ public class Cache {
     }
 
     public Measurement storeMeasurement(Measurement m) {
-        Measurement result = measurementRepository.saveAndFlush(m);
-        log.info("Stored Measurement {} on cache", result);
+        Measurement measurementCheck = measurementRepository.findByLatitudeAndLongitude(m.getLatitude(), m.getLongitude()).orElse(null);
+        Measurement result;
+        if (measurementCheck == null) {
+            result = measurementRepository.saveAndFlush(m);
+            log.info("Stored Measurement {} on cache", result);
+        } else {
+            result = measurementCheck;
+            log.info("Measurement {} was already on cache", result);
+        }
         return result;
     }
 
