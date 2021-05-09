@@ -8,11 +8,13 @@ import {RequestLocation} from '../communication/models/requestLocation';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-measurements-day',
+  templateUrl: './measurements-day.component.html',
+  styleUrls: ['./measurements-day.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class MeasurementsDayComponent implements OnInit {
+  private myDatePickerFrom: Date;
+  private myDatePickerTo: Date;
   private measurement: Measurement;
   private requested = false;
   private error = false;

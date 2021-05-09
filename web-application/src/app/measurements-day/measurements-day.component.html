@@ -1,5 +1,5 @@
 <div class="panel-header panel-header-lg"
-     style=" display: flex; flex-direction: column; justify-content: space-around; padding-top: 0px">
+     style=" display: flex; flex-direction: column; justify-content: space-around; padding-top: 0px; height: 480px">
     <div class="row" style="margin-top: 50px">
         <div class="col-md-3" style="display: flex; justify-content: space-around">
             <div class="form-group">
@@ -26,7 +26,7 @@
     </div>
     <div style="display: flex; justify-content: center">
         <div class="col-md-5">
-            <div class="card" style="display: flex; flex-direction: row; height: 210px; margin-bottom: 25px">
+            <div class="card" style="display: flex; flex-direction: row; height: 310px; margin-bottom: 25px">
                 <div class="card-body">
                     <h3 style="text-align: center; margin-bottom: 15px">Search by
                         {{selectedSearch}}</h3>
@@ -70,7 +70,7 @@
 
 
                                 <button [disabled]="requested
-      || f.latitude.errors || f.longitude.errors"
+      || f.latitude.errors || f.longitude.errors || myDatePickerFrom === undefined || myDatePickerTo === undefined"
                                         type="submit" rounded="true"
                                         style="border-radius: 50%; height: 40px; width: 25px; display: flex; justify-content: center; align-items: center"
                                         class="btn btn-info"><i class="fas fa-search"></i></button>
@@ -98,15 +98,37 @@
                                     </div>
                                 </div>
 
-
                                 <button [disabled]="requested
-      || l.location.errors "
+      || l.location.errors || myDatePickerFrom === undefined || myDatePickerTo === undefined "
                                         type="submit" rounded="true"
                                         style="border-radius: 50%; height: 40px; width: 25px; display: flex; justify-content: center; align-items: center"
                                         class="btn btn-info"><i class="fas fa-search"></i></button>
 
                             </div>
+
                         </form>
+                    </div>
+                    <div style="display: flex; justify-content: space-around">
+                        <mat-form-field>
+                            <input matInput [ngxMatDatetimePicker]="pickerFrom" placeholder="From"
+                                   [(ngModel)]="myDatePickerFrom">
+
+                            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+
+                            <ngx-mat-datetime-picker #pickerFrom
+                                                     [enableMeridian]="true"></ngx-mat-datetime-picker>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput [ngxMatDatetimePicker]="pickerTo" placeholder="To"
+                                   [(ngModel)]="myDatePickerTo"
+                                   [min]="myDatePickerFrom">
+
+                            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+
+                            <ngx-mat-datetime-picker #pickerTo
+                                                     [enableMeridian]="true"></ngx-mat-datetime-picker>
+                        </mat-form-field>
                     </div>
                 </div>
             </div>
@@ -126,7 +148,8 @@
                     <h3 class="card-title">Measurement Date</h3>
                 </div>
                 <div class="card-body" style="display: flex; justify-content: space-around">
-                    <i class="far fa-clock fa-2x" style="color:#6672C0;"></i>  <h5>{{measurement.date | date:'short'}}</h5>
+                    <i class="far fa-clock fa-2x" style="color:#6672C0;"></i>
+                    <h5>{{measurement.date | date:'short'}}</h5>
                 </div>
             </div>
 

@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
 
 import { DashboardComponent } from '../../dashboard/dashboard.component';
-import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { CacheComponent } from '../../cache/cache.component';
+import {MeasurementsDayComponent} from '../../measurements-day/measurements-day.component';
 
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'actual-measurement',      component: DashboardComponent },
-    { path: 'cache',      component: CacheComponent },
-    { path: 'user-profile',   component: UserProfileComponent }
+    { path: 'measurement-by-date', component: MeasurementsDayComponent },
+    { path: 'cache',      component: CacheComponent }
 ];
