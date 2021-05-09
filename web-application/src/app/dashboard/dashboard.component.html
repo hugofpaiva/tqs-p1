@@ -26,7 +26,7 @@
     </div>
     <div style="display: flex; justify-content: center">
         <div class="col-md-5">
-            <div class="card" style="display: flex; flex-direction: row; height: 225px">
+            <div class="card" style="display: flex; flex-direction: row; height: 210px; margin-bottom: 25px">
                 <div class="card-body">
                     <h3 style="text-align: center; margin-bottom: 15px">Search by
                         {{selectedSearch}}</h3>
@@ -38,11 +38,14 @@
 
                                 <div style="width: 25%" class="form-group">
                                     <label>Latitude</label>
-                                    <input #latitude type="number" (click)="errorsCheck()" [(ngModel)]="requestCoordinates.latitude"
+                                    <input #latitude type="number" (click)="errorsCheck()"
+                                           [(ngModel)]="requestCoordinates.latitude"
                                            formControlName="latitude" class="form-control"
                                            [ngClass]="{ 'is-invalid': f.latitude.errors && checkFormErrors }"/>
-                                    <div *ngIf=" !requested && f.latitude.errors && checkFormErrors" class="invalid-feedback">
-                                        <div *ngIf=" !requested && f.latitude.errors && checkFormErrors">Latitude must be between -90 and
+                                    <div *ngIf=" !requested && f.latitude.errors && checkFormErrors"
+                                         class="invalid-feedback">
+                                        <div *ngIf=" !requested && f.latitude.errors && checkFormErrors">Latitude must
+                                            be between -90 and
                                             90
                                             with 6 decimals
                                         </div>
@@ -51,11 +54,14 @@
 
                                 <div style="width: 25%" class="form-group">
                                     <label>Longitude</label>
-                                    <input #longitude type="number" (click)="errorsCheck()" [(ngModel)]="requestCoordinates.longitude"
+                                    <input #longitude type="number" (click)="errorsCheck()"
+                                           [(ngModel)]="requestCoordinates.longitude"
                                            formControlName="longitude" class="form-control"
                                            [ngClass]="{ 'is-invalid': f.longitude.errors && checkFormErrors }"/>
-                                    <div *ngIf=" !requested && f.longitude.errors && checkFormErrors" class="invalid-feedback">
-                                        <div *ngIf=" !requested && f.longitude.errors && checkFormErrors">Longitude must be between -180
+                                    <div *ngIf=" !requested && f.longitude.errors && checkFormErrors"
+                                         class="invalid-feedback">
+                                        <div *ngIf=" !requested && f.longitude.errors && checkFormErrors">Longitude must
+                                            be between -180
                                             and
                                             180 with 6 decimals
                                         </div>
@@ -80,11 +86,14 @@
 
                                 <div class="form-group">
                                     <label>Location</label>
-                                    <input style="width: 350px" #location (click)="errorsCheck()" type="text" [(ngModel)]="requestLocation.location"
+                                    <input style="width: 350px" #location (click)="errorsCheck()" type="text"
+                                           [(ngModel)]="requestLocation.location"
                                            formControlName="location" class="form-control"
                                            [ngClass]="{ 'is-invalid': l.location.errors && checkFormErrors }"/>
-                                    <div *ngIf=" !requested && l.location.errors && checkFormErrors" class="invalid-feedback">
-                                        <div *ngIf=" !requested && l.longitude.required && checkFormErrors">Location is required
+                                    <div *ngIf=" !requested && l.location.errors && checkFormErrors"
+                                         class="invalid-feedback">
+                                        <div *ngIf=" !requested && l.longitude.required && checkFormErrors">Location is
+                                            required
                                         </div>
                                     </div>
                                 </div>
@@ -106,77 +115,81 @@
     </div>
 </div>
 
-<div *ngIf="measurement" class="main-content">
-    <div class="row" style="display: flex; justify-content: space-around">
-        <div class="card col-md-3">
-            <div class="card-header">
-                <h3 class="card-title">Measurement Date</h3>
-            </div>
-            <div class="card-body" style="display: flex; justify-content: space-around">
-                <i class="far fa-clock fa-2x"></i>  <h5>{{measurement.date | date:'short'}}</h5>
-            </div>
-        </div>
-
-        <div class="card col-md-3">
-            <div class="card-header">
-                <h3 class="card-title">Air Quality Index</h3>
-            </div>
-            <div class="card-body" style="display: flex; justify-content: space-around">
-                <i class="fab fa-envira fa-2x"></i>  <h5>{{measurement.airQualityIndex}}</h5>
-            </div>
-        </div>
-
-        <div class="card col-md-3">
-            <div class="card-header">
-                <h3 class="card-title">Temperature</h3>
-            </div>
-            <div class="card-body" style="display: flex; justify-content: space-around">
-                <i class="fas fa-thermometer-half fa-2x"></i>
-                <h5>{{((measurement.temperature === null) ? '--' : measurement.temperature + 'ºC')}}</h5>
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="measurement.responseSource == 'AQICN'" class="row"
-         style="display: flex; justify-content: space-around">
-        <div *ngFor="let value of valuesLine3.keys()" class="card col-md-3">
-            <div class="card-header">
-                <h3 class="card-title">{{value | titlecase}}</h3>
-            </div>
-            <div class="card-body" style="display: flex; justify-content: space-around">
-                <i class="far fa-clock fa-2x"></i>
-                <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine3.get(value))}}</h5>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="display: flex; justify-content: space-around">
-        <div *ngFor="let value of valuesLine1.keys()" class="card col-md-2">
-            <div class="card-header">
-                <h3 class="card-title">{{value | uppercase}}</h3>
-            </div>
-            <div class="card-body" style="display: flex; justify-content: space-around">
-                <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine1.get(value))}}</h5>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="display: flex; justify-content: space-around">
-        <div *ngFor="let value of valuesLine2.keys()" class="card col-md-2">
-            <div class="card-header">
-                <h3 class="card-title">{{value | uppercase}}</h3>
-            </div>
-            <div class="card-body" style="display: flex; justify-content: space-around">
-                <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine2.get(value))}}</h5>
-            </div>
-        </div>
-    </div>
-
-
-</div>
+<ngx-spinner [fullScreen]="false"></ngx-spinner>
 
 <div class="main-content">
-    <h2>Loading...</h2>
+
+    <div *ngIf="measurement">
+        <div class="row" style="display: flex; justify-content: space-around">
+            <div class="card col-md-3">
+                <div class="card-header">
+                    <h3 class="card-title">Measurement Date</h3>
+                </div>
+                <div class="card-body" style="display: flex; justify-content: space-around">
+                    <i class="far fa-clock fa-2x" style="color:#6672C0;"></i>  <h5>{{measurement.date | date:'short'}}</h5>
+                </div>
+            </div>
+
+            <div class="card col-md-3">
+                <div class="card-header">
+                    <h3 class="card-title">Air Quality Index</h3>
+                </div>
+                <div class="card-body" style="display: flex; justify-content: space-around">
+                    <i class="fab fa-envira fa-2x" style="color: #93D16E"></i>  <h5>{{measurement.airQualityIndex}}</h5>
+                </div>
+            </div>
+
+            <div class="card col-md-3">
+                <div class="card-header">
+                    <h3 class="card-title">Temperature</h3>
+                </div>
+                <div class="card-body" style="display: flex; justify-content: space-around">
+                    <i class="fas fa-thermometer-half fa-2x" style="color: #E18660"></i>
+                    <h5>{{((measurement.temperature === null) ? '--' : measurement.temperature + 'ºC')}}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="measurement.responseSource == 'AQICN'" class="row"
+             style="display: flex; justify-content: space-around">
+            <div *ngFor="let value of valuesLine3.keys()" class="card col-md-3">
+                <div class="card-header">
+                    <h3 class="card-title">{{value | titlecase}}</h3>
+                </div>
+                <div class="card-body" style="display: flex; justify-content: space-around">
+                    <i class="{{valuesLine3.get(value)[1]}} fa-2x" style="color: #52A8F8"></i>
+                    <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine3.get(value)[0])}}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="display: flex; justify-content: space-around">
+            <div *ngFor="let value of valuesLine1.keys()" class="card col-md-2">
+                <div class="card-header">
+                    <h3 class="card-title">{{value | uppercase}}</h3>
+                </div>
+                <div class="card-body" style="display: flex; justify-content: space-around">
+                    <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine1.get(value))}}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="display: flex; justify-content: space-around">
+            <div *ngFor="let value of valuesLine2.keys()" class="card col-md-2">
+                <div class="card-header">
+                    <h3 class="card-title">{{value | uppercase}}</h3>
+                </div>
+                <div class="card-body" style="display: flex; justify-content: space-around">
+                    <h5>{{((measurement[value] === null) ? '--' : measurement[value] + '' + valuesLine2.get(value))}}</h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="error" style="margin-top: 200px">
+        <h3 style="text-align: center">There was an error during the request!</h3>
+    </div>
 </div>
 
 

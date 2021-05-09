@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
-import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { ChartsModule } from 'ng2-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { CacheComponent } from '../../cache/cache.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
     imports: [
@@ -20,11 +20,11 @@ import {NgxPaginationModule} from 'ngx-pagination';
         NgbModule,
         ToastrModule.forRoot(),
         NgxPaginationModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgxSpinnerModule
     ],
   declarations: [
     DashboardComponent,
-    UserProfileComponent,
     CacheComponent
   ]
 })

@@ -5,6 +5,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RequestCoordinates} from '../communication/models/requestCoordinates';
 import {RequestLocation} from '../communication/models/requestLocation';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,8 @@ export class DashboardComponent implements OnInit {
   private checkFormErrors = false;
   private valuesLine1: Map<String, String> = new Map([['co', 'g'], ['no', 'f'], ['no2', 'f'], ['o3', 'f']]);
   private valuesLine2: Map<String, String> = new Map([['so2', 'g'], ['pm25', 'f'], ['pm10', 'f'], ['nh3', 'f']]);
-  private valuesLine3: Map<String, String> = new Map([['wind', 'g'], ['humidity', 'f'], ['pressure', 'f']]);
+  private valuesLine3: Map<String, String[]> = new Map([['wind', ['g', 'fas fa-paper-plane']], ['humidity', ['g', 'fas fa-tint']],
+    ['pressure', ['g', 'fas fa-tachometer-alt']]]);
   private selectedSearch: String = 'Coordinates';
 
   @Input() requestCoordinates: RequestCoordinates = new RequestCoordinates();
@@ -29,7 +31,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-  constructor(private formBuilder: FormBuilder, private measurementService: MeasurementService) {
+  constructor(private formBuilder: FormBuilder, private measurementService: MeasurementService, private spinner: NgxSpinnerService) {
     this.coordinatesForm = this.formBuilder.group({
       longitude: ['', [Validators.required, Validators.min(-180.000000), Validators.max(180.000000),
         Validators.pattern('^-?\\d+\\.\\d{6,6}$')]],
@@ -46,14 +48,17 @@ export class DashboardComponent implements OnInit {
   }
 
   getActualMeasurement(lat: number, long: number ): void {
+    this.spinner.show();
     this.requested = true;
     this.error = false;
     this.measurementService.getMeasurement(lat, long).subscribe(measurement => {
       this.measurement = measurement;
       this.requested = false;
+      this.spinner.hide();
     }, (err: HttpErrorResponse) => {
       this.error = true;
       this.requested = false;
+      this.spinner.hide();
     });
   }
 
