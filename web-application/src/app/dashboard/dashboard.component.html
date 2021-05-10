@@ -36,7 +36,7 @@
                             <div class="modal-body"
                                  style="display: flex; justify-content: space-around; align-items: center">
 
-                                <div style="width: 25%; height: 50px" class="form-group">
+                                <div style="width: 25%; height: 70px" class="form-group">
                                     <label>Latitude</label>
                                     <input #latitude type="number" (click)="errorsCheck()"
                                            [(ngModel)]="requestCoordinates.latitude"
@@ -51,7 +51,7 @@
                                     </div>
                                 </div>
 
-                                <div style="width: 25%; height: 50px" class="form-group">
+                                <div style="width: 25%; height: 70px" class="form-group">
                                     <label>Longitude</label>
                                     <input #longitude type="number" (click)="errorsCheck()"
                                            [(ngModel)]="requestCoordinates.longitude"
@@ -83,7 +83,7 @@
                             <div class="modal-body"
                                  style="display: flex; justify-content: space-around; align-items: center">
 
-                                <div class="form-group">
+                                <div class="form-group" style="height:70px">
                                     <label>Location</label>
                                     <input style="width: 350px" #location (click)="errorsCheck()" type="text"
                                            [(ngModel)]="requestLocation.location"
