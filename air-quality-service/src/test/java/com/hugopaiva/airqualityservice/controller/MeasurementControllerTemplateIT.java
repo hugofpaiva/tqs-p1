@@ -44,7 +44,7 @@ public class MeasurementControllerTemplateIT {
     @Test
     public void testWhenInvalidLatMin_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-182.903213+"&lat="+90.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+-182.903213+"&lat="+90.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
@@ -52,7 +52,7 @@ public class MeasurementControllerTemplateIT {
     @Test
     public void testWhenInvalidLatMax_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+91.903213+"&lat="+90.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+91.903213+"&lat="+90.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
@@ -60,7 +60,7 @@ public class MeasurementControllerTemplateIT {
     @Test
     public void testWhenInvalidLonMin_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-85.903213+"&lat="+-185.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+-85.903213+"&lat="+-185.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
@@ -68,7 +68,7 @@ public class MeasurementControllerTemplateIT {
     @Test
     public void testWhenInvalidLonMax_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-85.903213+"&lat="+185.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+-85.903213+"&lat="+185.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
@@ -76,7 +76,7 @@ public class MeasurementControllerTemplateIT {
     @Test
     public void testWhenNoParams_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement", Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates", Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
@@ -84,7 +84,7 @@ public class MeasurementControllerTemplateIT {
     @Test
     public void testWhenOnlyLat_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+52.435231, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+52.435231, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
@@ -92,7 +92,7 @@ public class MeasurementControllerTemplateIT {
     @Test
     public void testWhenOnlyLon_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lon="+52.435231, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lon="+52.435231, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
@@ -102,7 +102,7 @@ public class MeasurementControllerTemplateIT {
         Measurement m = createTestMeasurement();
 
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+m.getLatitude()+"&lon="+m.getLongitude(), Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+m.getLatitude()+"&lon="+m.getLongitude(), Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 
@@ -118,7 +118,7 @@ public class MeasurementControllerTemplateIT {
         Double longitude = 52.342123;
 
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+latitude+"&lon="+longitude, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+latitude+"&lon="+longitude, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 

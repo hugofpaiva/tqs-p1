@@ -73,7 +73,7 @@ class CacheTest {
         when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
                 .thenReturn(Optional.of(this.measurement));
 
-        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude);
+        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude, null);
 
         assertNotNull(cacheMeasurement);
 
@@ -105,7 +105,7 @@ class CacheTest {
     void testGetNonValidMeasurement() {
         when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
                 .thenReturn(Optional.empty());
-        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude);
+        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude, null);
 
         assertNull(cacheMeasurement);
 
@@ -122,7 +122,7 @@ class CacheTest {
         when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
                 .thenReturn(Optional.of(this.measurement));
 
-        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude);
+        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude, null);
 
         assertNull(cacheMeasurement);
 
@@ -141,7 +141,7 @@ class CacheTest {
         when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
                 .thenReturn(Optional.of(this.measurement));
 
-        Measurement cacheMeasurement = this.cache60sec.getMeasurement(this.latitude, this.longitude);
+        Measurement cacheMeasurement = this.cache60sec.getMeasurement(this.latitude, this.longitude, null);
 
         assertNull(cacheMeasurement);
 
@@ -169,7 +169,7 @@ class CacheTest {
 
         verify(measurementRepository, times(1)).delete(this.measurement);
 
-        assertNull(cache.getMeasurement(this.latitude, this.longitude));
+        assertNull(cache.getMeasurement(this.latitude, this.longitude, null));
 
     }
 

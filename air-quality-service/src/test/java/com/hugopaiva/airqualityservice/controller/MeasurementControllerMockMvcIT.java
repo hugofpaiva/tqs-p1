@@ -40,7 +40,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenInvalidLatMin_thenBadRequest() throws Exception {
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lat", String.valueOf(-182.903213))
                 .param("lon", String.valueOf(90.213212))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -49,7 +49,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenInvalidLatMax_thenBadRequest() throws Exception {
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lat", String.valueOf(91.903213))
                 .param("lon", String.valueOf(90.213212))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -58,7 +58,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenInvalidLonMin_thenBadRequest() throws Exception {
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lat", String.valueOf(-85.903213))
                 .param("lon", String.valueOf(-185.213212))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -67,7 +67,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenInvalidLonMax_thenBadRequest() throws Exception {
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lat", String.valueOf(-85.903213))
                 .param("lon", String.valueOf(185.213212))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -76,14 +76,14 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenNoParams_thenBadRequest() throws Exception {
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void testWhenOnlyLat_thenBadRequest() throws Exception {
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lat", String.valueOf(52.435231))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -91,7 +91,7 @@ class MeasurementControllerMockMvcIT {
 
     @Test
     public void testWhenOnlyLon_thenBadRequest() throws Exception {
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lon", String.valueOf(52.435231))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -101,7 +101,7 @@ class MeasurementControllerMockMvcIT {
     public void testHavingCache_thenStatus200() throws Exception {
         Measurement m = createTestMeasurement();
 
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lat", String.valueOf(m.getLatitude()))
                 .param("lon", String.valueOf(m.getLongitude()))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -135,7 +135,7 @@ class MeasurementControllerMockMvcIT {
         Double latitude = 50.342123;
         Double longitude = 52.342123;
 
-        mvc.perform(get("/actual-measurement")
+        mvc.perform(get("/actual-measurement-coordinates")
                 .param("lat", String.valueOf(latitude))
                 .param("lon", String.valueOf(longitude))
                 .contentType(MediaType.APPLICATION_JSON))

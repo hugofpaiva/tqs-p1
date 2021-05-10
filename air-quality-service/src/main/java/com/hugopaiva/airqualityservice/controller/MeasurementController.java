@@ -1,6 +1,7 @@
 package com.hugopaiva.airqualityservice.controller;
 
 import com.hugopaiva.airqualityservice.exception.BadRequestException;
+import com.hugopaiva.airqualityservice.exception.LocationNotFoundException;
 import com.hugopaiva.airqualityservice.exception.ServiceUnavailableException;
 import com.hugopaiva.airqualityservice.model.Measurement;
 import com.hugopaiva.airqualityservice.services.MeasurementService;
@@ -17,13 +18,21 @@ public class MeasurementController {
     @Autowired
     MeasurementService measurementService;
 
-    @GetMapping("/actual-measurement")
-    public ResponseEntity<Measurement> getActualMeasurement(@RequestParam Double lat, @RequestParam Double lon) throws ServiceUnavailableException, BadRequestException {
+    @GetMapping("/actual-measurement-coordinates")
+    public ResponseEntity<Measurement> getActualMeasurementByCoordinates(@RequestParam Double lat, @RequestParam Double lon) throws ServiceUnavailableException, BadRequestException {
         if (lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0){
             throw new BadRequestException("Invalid parameters");
         }
 
-        Measurement response = measurementService.getActualMeasurementByLocation(lat, lon);
+        Measurement response = measurementService.getActualMeasurementByCoordinates(lat, lon, null);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/actual-measurement-location")
+    public ResponseEntity<Measurement> getActualMeasurementByCoordinates(@RequestParam String location) throws LocationNotFoundException {
+
+        Measurement response = measurementService.getActualMeasurementByLocation(location);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

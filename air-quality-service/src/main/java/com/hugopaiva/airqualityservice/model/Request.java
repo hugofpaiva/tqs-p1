@@ -46,10 +46,10 @@ public class Request {
         this.longitude = longitude;
     }
 
-    public Request(CacheResponseState cacheResponse, String airQualityLocationAccessed, Double latitude, Double longitude) {
+    public Request(CacheResponseState cacheResponse, Double latitude, Double longitude, String airQualityLocationAccessed) {
         this.cacheResponse = cacheResponse;
-        this.airQualityLocationAccessed = airQualityLocationAccessed;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.airQualityLocationAccessed = airQualityLocationAccessed;
     }
 }

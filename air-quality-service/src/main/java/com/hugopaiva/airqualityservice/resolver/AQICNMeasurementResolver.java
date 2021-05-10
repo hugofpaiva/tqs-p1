@@ -1,7 +1,7 @@
 package com.hugopaiva.airqualityservice.resolver;
 
 import com.hugopaiva.airqualityservice.connection.HttpClient;
-import com.hugopaiva.airqualityservice.exception.APINotResponding;
+import com.hugopaiva.airqualityservice.exception.APINotRespondingException;
 import com.hugopaiva.airqualityservice.model.Measurement;
 import com.hugopaiva.airqualityservice.model.ResponseSource;
 import org.apache.http.client.utils.URIBuilder;
@@ -30,7 +30,7 @@ public class AQICNMeasurementResolver implements MeasurementResolver{
     private Environment environments;
 
     @Override
-    public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, APINotResponding, ParseException, IOException {
+    public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, APINotRespondingException, ParseException, IOException {
         URIBuilder uriBuilder = new URIBuilder("https://api.waqi.info/feed/geo:" +
                 (new Formatter()).format(Locale.US, "%.6f", latitude) +";"+
                 (new Formatter()).format(Locale.US, "%.6f", longitude)+"/");

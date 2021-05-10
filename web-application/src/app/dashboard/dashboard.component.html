@@ -26,17 +26,17 @@
     </div>
     <div style="display: flex; justify-content: center">
         <div class="col-md-5">
-            <div class="card" style="display: flex; flex-direction: row; height: 210px; margin-bottom: 25px">
+            <div class="card" style="display: flex; flex-direction: column; height: 250px; margin-bottom: 25px">
                 <div class="card-body">
                     <h3 style="text-align: center; margin-bottom: 15px">Search by
                         {{selectedSearch}}</h3>
                     <div *ngIf="selectedSearch === 'Coordinates'">
                         <form [formGroup]="coordinatesForm"
-                              (ngSubmit)="getActualMeasurement(requestCoordinates.latitude, requestCoordinates.longitude)">
+                              (ngSubmit)="getActualMeasurementCoordinates(requestCoordinates.latitude, requestCoordinates.longitude)">
                             <div class="modal-body"
                                  style="display: flex; justify-content: space-around; align-items: center">
 
-                                <div style="width: 25%" class="form-group">
+                                <div style="width: 25%; height: 50px" class="form-group">
                                     <label>Latitude</label>
                                     <input #latitude type="number" (click)="errorsCheck()"
                                            [(ngModel)]="requestCoordinates.latitude"
@@ -47,12 +47,11 @@
                                         <div *ngIf=" !requested && f.latitude.errors && checkFormErrors">Latitude must
                                             be between -90 and
                                             90
-                                            with 6 decimals
                                         </div>
                                     </div>
                                 </div>
 
-                                <div style="width: 25%" class="form-group">
+                                <div style="width: 25%; height: 50px" class="form-group">
                                     <label>Longitude</label>
                                     <input #longitude type="number" (click)="errorsCheck()"
                                            [(ngModel)]="requestCoordinates.longitude"
@@ -63,7 +62,7 @@
                                         <div *ngIf=" !requested && f.longitude.errors && checkFormErrors">Longitude must
                                             be between -180
                                             and
-                                            180 with 6 decimals
+                                            180
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +79,7 @@
                     </div>
                     <div *ngIf="selectedSearch === 'Location'">
                         <form [formGroup]="locationForm"
-                              (ngSubmit)="getActualMeasurement(requestCoordinates.latitude, requestCoordinates.longitude)">
+                              (ngSubmit)="getActualMeasurementLocation(requestLocation.location)">
                             <div class="modal-body"
                                  style="display: flex; justify-content: space-around; align-items: center">
 
@@ -92,7 +91,7 @@
                                            [ngClass]="{ 'is-invalid': l.location.errors && checkFormErrors }"/>
                                     <div *ngIf=" !requested && l.location.errors && checkFormErrors"
                                          class="invalid-feedback">
-                                        <div *ngIf=" !requested && l.longitude.required && checkFormErrors">Location is
+                                        <div *ngIf=" !requested && l.location.required && checkFormErrors">Location is
                                             required
                                         </div>
                                     </div>
@@ -109,9 +108,9 @@
                         </form>
                     </div>
                 </div>
+                <h5 *ngIf="measurement" style="text-align: center">{{measurement.latitude}}º, {{measurement.longitude}}º{{(measurement.location === null ? '' : ' - ' + measurement.location)}} </h5>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -120,7 +119,7 @@
 <div class="main-content">
 
     <div *ngIf="measurement">
-        <div class="row" style="display: flex; justify-content: space-around">
+        <div class="row" style="display: flex; justify-content: space-around; margin-top: 20px">
             <div class="card col-md-3">
                 <div class="card-header">
                     <h3 class="card-title">Measurement Date</h3>

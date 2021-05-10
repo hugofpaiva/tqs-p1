@@ -7,7 +7,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hugopaiva.airqualityservice.exception.APINotResponding;
+import com.hugopaiva.airqualityservice.exception.APINotRespondingException;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -20,7 +20,7 @@ public class HttpClient {
 
     private static final Logger log = LoggerFactory.getLogger(HttpClient.class);
 
-    public String get(String url) throws APINotResponding, IOException {
+    public String get(String url) throws APINotRespondingException, IOException {
         CloseableHttpClient client = null;
         CloseableHttpResponse response = null;
 
@@ -41,7 +41,7 @@ public class HttpClient {
             return EntityUtils.toString(entity);
         } catch (Exception e) {
             log.error("Error getting HttpEntity!");
-            throw new APINotResponding("URL Not Responding: " + url);
+            throw new APINotRespondingException("URL Not Responding: " + url);
         } finally {
             if (response != null)
                 response.close();

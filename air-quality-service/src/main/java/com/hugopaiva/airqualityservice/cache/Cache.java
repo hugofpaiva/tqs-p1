@@ -34,7 +34,7 @@ public class Cache {
         this.timeToLive = 120;
     }
 
-    public Measurement getMeasurement(Double lat, Double lon) {
+    public Measurement getMeasurement(Double lat, Double lon, String location) {
         log.info("Getting Measurement for lat {} and lon {} in the cache", lat, lon);
         Measurement m = measurementRepository.findByLatitudeAndLongitude(lat, lon).orElse(null);
 
@@ -42,15 +42,15 @@ public class Cache {
             if (hasExpired(m)) {
                 log.info("Measurement expired in the cache");
                 deleteMeasurementFromCache(m);
-                requestRepository.saveAndFlush(new Request(CacheResponseState.MISS, lat, lon));
+                requestRepository.saveAndFlush(new Request(CacheResponseState.MISS, lat, lon, location));
                 return null;
             } else {
                 log.info("Measurement retrieved from cache");
-                requestRepository.saveAndFlush(new Request(CacheResponseState.HIT, lat, lon));
+                requestRepository.saveAndFlush(new Request(CacheResponseState.HIT, lat, lon, location));
             }
         } else {
             log.info("Measurement not found in the cache");
-            requestRepository.saveAndFlush(new Request(CacheResponseState.MISS, lat, lon));
+            requestRepository.saveAndFlush(new Request(CacheResponseState.MISS, lat, lon, location));
         }
 
         return m;

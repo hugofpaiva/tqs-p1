@@ -1,7 +1,7 @@
 package com.hugopaiva.airqualityservice.resolver;
 
 import com.hugopaiva.airqualityservice.connection.HttpClient;
-import com.hugopaiva.airqualityservice.exception.APINotResponding;
+import com.hugopaiva.airqualityservice.exception.APINotRespondingException;
 import com.hugopaiva.airqualityservice.model.Measurement;
 import com.hugopaiva.airqualityservice.model.ResponseSource;
 import org.apache.http.client.utils.URIBuilder;
@@ -18,7 +18,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @Component
 public class OpenWeatherMeasurementResolver implements MeasurementResolver{
@@ -33,11 +35,11 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
     private Environment environments;
 
     @Override
-    public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotResponding, ParseException {
-        URIBuilder uriBuilder = new URIBuilder("http://api.openweathermap.org/data/2.5/air_pollution");
+    public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotRespondingException, ParseException {
+        URIBuilder uriBuilder = new URIBuilder("https://api.openweathermap.org/data/2.5/air_pollution");
         uriBuilder.addParameter("appid", environments.getProperty("openweathermap.api.key"));
-        uriBuilder.addParameter("lat", (new Formatter()).format(Locale.US, "%f", latitude).toString());
-        uriBuilder.addParameter("lon", (new Formatter()).format(Locale.US, "%f", longitude).toString());
+        uriBuilder.addParameter("lat", (new Formatter()).format(Locale.US, "%.6f", latitude).toString());
+        uriBuilder.addParameter("lon", (new Formatter()).format(Locale.US, "%.6f", longitude).toString());
 
         String response = this.httpClient.get(uriBuilder.build().toString());
 
@@ -76,6 +78,32 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
         result.setSo2(so2);
 
         result.setResponseSource(ResponseSource.OPENWEATHER);
+
+        return result;
+    }
+
+    public Map<String, String> getLocationCoordinates(String location) throws ParseException, URISyntaxException,
+            IOException, APINotRespondingException {
+        URIBuilder uriBuilder = new URIBuilder("https://api.openweathermap.org/geo/1.0/direct");
+        uriBuilder.addParameter("appid", environments.getProperty("openweathermap.api.key"));
+        uriBuilder.addParameter("q", location);
+
+        String response = this.httpClient.get(uriBuilder.build().toString());
+
+        return jsonToGeoCoordinates(response);
+    }
+
+    public Map<String, String> jsonToGeoCoordinates(String data) throws ParseException {
+        log.info("Parsing response from Open Weather API");
+
+        HashMap<String, String> result = new HashMap<>();
+
+        JSONArray jsonArray = (JSONArray) new  JSONParser().parse(data);
+        JSONObject location = (JSONObject) jsonArray.get(0);
+
+        result.put("latitude", String.valueOf(location.get("lat")));
+        result.put("longitude", String.valueOf(location.get("lon")));
+        result.put("location", location.get("name") + ", " + location.get("country"));
 
         return result;
     }
