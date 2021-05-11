@@ -78,6 +78,7 @@ public class MeasurementService {
 
         } catch (ServiceUnavailableException e) {
             throw new ServiceUnavailableException(e.getMessage());
+
         } catch (APINotRespondingException e) {
             log.error("There was an error while doing the OpenWeather Location Resolver request: {}", e.getMessage());
             throw new ServiceUnavailableException("All services unavailable.");

@@ -97,7 +97,8 @@ class CacheTest {
 
         verify(measurementRepository, times(1)).findByLatitudeAndLongitude(anyDouble(), anyDouble());
 
-        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.HIT, this.latitude, this.longitude));
+        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.HIT,
+                this.latitude, this.longitude, null));
 
     }
 
@@ -105,13 +106,14 @@ class CacheTest {
     void testGetNonValidMeasurement() {
         when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
                 .thenReturn(Optional.empty());
-        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude, null);
+        Measurement cacheMeasurement = cache.getMeasurement(this.latitude, this.longitude, "Example Location");
 
         assertNull(cacheMeasurement);
 
         verify(measurementRepository, times(1)).findByLatitudeAndLongitude(anyDouble(), anyDouble());
 
-        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS, this.latitude, this.longitude));
+        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS,
+                this.latitude, this.longitude, "Example Location"));
 
     }
 
@@ -130,7 +132,8 @@ class CacheTest {
         verify(measurementRepository, times(1)).delete(this.measurement);
 
 
-        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS, this.latitude, this.longitude));
+        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS,
+                this.latitude, this.longitude, null));
 
     }
 
@@ -141,7 +144,7 @@ class CacheTest {
         when(measurementRepository.findByLatitudeAndLongitude(this.latitude, this.longitude))
                 .thenReturn(Optional.of(this.measurement));
 
-        Measurement cacheMeasurement = this.cache60sec.getMeasurement(this.latitude, this.longitude, null);
+        Measurement cacheMeasurement = this.cache60sec.getMeasurement(this.latitude, this.longitude, "Example Location");
 
         assertNull(cacheMeasurement);
 
@@ -149,7 +152,8 @@ class CacheTest {
         verify(measurementRepository, times(1)).delete(this.measurement);
 
 
-        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS, this.latitude, this.longitude));
+        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS,
+                this.latitude, this.longitude, "Example Location"));
 
     }
 
@@ -170,6 +174,9 @@ class CacheTest {
         verify(measurementRepository, times(1)).delete(this.measurement);
 
         assertNull(cache.getMeasurement(this.latitude, this.longitude, null));
+
+        verify(requestRepository, times(1)).saveAndFlush(new Request(CacheResponseState.MISS,
+                this.latitude, this.longitude, null));
 
     }
 
