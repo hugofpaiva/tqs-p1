@@ -1,6 +1,7 @@
 package com.hugopaiva.airqualityservice.services;
 
 import com.hugopaiva.airqualityservice.cache.Cache;
+import com.hugopaiva.airqualityservice.exception.APINotRespondingException;
 import com.hugopaiva.airqualityservice.exception.LocationNotFoundException;
 import com.hugopaiva.airqualityservice.exception.ServiceUnavailableException;
 import com.hugopaiva.airqualityservice.model.Measurement;
@@ -62,24 +63,27 @@ public class MeasurementService {
 
     }
 
-    public Measurement getActualMeasurementByLocation(String location) throws LocationNotFoundException {
+    public Measurement getActualMeasurementByLocation(String location) throws LocationNotFoundException, ServiceUnavailableException {
         log.info("Getting Coordinates for location: {} in the API", location);
 
         try {
             Map<String, String> result = openWeatherMeasurementResolver.getLocationCoordinates(location);
 
             String locationRequest = result.get("location");
-            Double latitude =  Double.valueOf(result.get("latitude"));
-            System.out.println(latitude);
-            Double longitude =  Double.valueOf(result.get("longitude"));
-            System.out.println(longitude);
+            Double latitude = Double.valueOf(result.get("latitude"));
+            Double longitude = Double.valueOf(result.get("longitude"));
 
             return getActualMeasurementByCoordinates(latitude, longitude, locationRequest);
 
 
+        } catch (ServiceUnavailableException e) {
+            throw new ServiceUnavailableException(e.getMessage());
+        } catch (APINotRespondingException e) {
+            log.error("There was an error while doing the OpenWeather Location Resolver request: {}", e.getMessage());
+            throw new ServiceUnavailableException("All services unavailable.");
+
         } catch (Exception e) {
             log.error("There was an error while doing the OpenWeather Location Resolver request: {}", e.getMessage());
-
             throw new LocationNotFoundException("Location not found.");
 
         }

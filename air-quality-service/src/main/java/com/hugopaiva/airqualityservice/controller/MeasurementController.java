@@ -30,7 +30,8 @@ public class MeasurementController {
     }
 
     @GetMapping("/actual-measurement-location")
-    public ResponseEntity<Measurement> getActualMeasurementByCoordinates(@RequestParam String location) throws LocationNotFoundException {
+    public ResponseEntity<Measurement> getActualMeasurementByCoordinates(@RequestParam String location) throws
+            LocationNotFoundException, ServiceUnavailableException {
 
         Measurement response = measurementService.getActualMeasurementByLocation(location);
 

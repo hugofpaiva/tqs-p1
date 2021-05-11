@@ -2,6 +2,7 @@ package com.hugopaiva.airqualityservice.services;
 
 import com.hugopaiva.airqualityservice.cache.Cache;
 import com.hugopaiva.airqualityservice.exception.APINotRespondingException;
+import com.hugopaiva.airqualityservice.exception.LocationNotFoundException;
 import com.hugopaiva.airqualityservice.exception.ServiceUnavailableException;
 import com.hugopaiva.airqualityservice.model.Measurement;
 import com.hugopaiva.airqualityservice.resolver.AQICNMeasurementResolver;
@@ -19,6 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -138,4 +141,160 @@ class MeasurementServiceTest {
         Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
                 .getActualMeasurement(anyDouble(), anyDouble());
     }
+
+    @Test
+    public void testGetActualMeasurementByLocationCache() throws ServiceUnavailableException, APINotRespondingException,
+            ParseException, URISyntaxException, IOException, LocationNotFoundException {
+        Map<String, String> locationResolverResults = new HashMap<>();
+        this.latitude = 38.7167;
+        this.longitude = -9.1333;
+        this.measurement.setLatitude(this.latitude);
+        this.measurement.setLongitude(this.longitude);
+        this.measurement.setLocation("Lisbon, PT");
+        locationResolverResults.put("latitude", "38.7167");
+        locationResolverResults.put("longitude", "-9.1333");
+        locationResolverResults.put("location", "Lisbon, PT");
+        Mockito.when(openWeatherMeasurementResolver.getLocationCoordinates("Lisboa")).thenReturn(locationResolverResults);
+
+        Mockito.when(cache.getMeasurement(this.latitude, this.longitude, "Lisbon, PT")).thenReturn(this.measurement);
+
+        Measurement found = measurementService.getActualMeasurementByLocation("Lisboa");
+
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
+                .getLocationCoordinates("Lisboa");
+
+        Mockito.verify(cache, VerificationModeFactory.times(1))
+                .getMeasurement(anyDouble(), anyDouble(), isNotNull());
+        assertThat(found).isEqualTo(this.measurement);
+    }
+
+    @Test
+    public void testGetActualMeasurementByLocationAQICN() throws ServiceUnavailableException, URISyntaxException,
+            ParseException, IOException, APINotRespondingException, LocationNotFoundException {
+        Map<String, String> locationResolverResults = new HashMap<>();
+        this.latitude = 38.7167;
+        this.longitude = -9.1333;
+        this.measurement.setLatitude(this.latitude);
+        this.measurement.setLongitude(this.longitude);
+        this.measurement.setLocation("Lisbon, PT");
+        locationResolverResults.put("latitude", "38.7167");
+        locationResolverResults.put("longitude", "-9.1333");
+        locationResolverResults.put("location", "Lisbon, PT");
+
+        Mockito.when(openWeatherMeasurementResolver.getLocationCoordinates("Lisboa")).thenReturn(locationResolverResults);
+
+        Mockito.when(cache.getMeasurement(this.latitude, this.longitude, "Lisbon, PT")).thenReturn(null);
+
+        Mockito.when(aqicnMeasurementResolver.getActualMeasurement(this.latitude, this.longitude)).thenReturn(this.measurement);
+
+        Measurement found = measurementService.getActualMeasurementByLocation("Lisboa");
+
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1)).getLocationCoordinates("Lisboa");
+        Mockito.verify(cache, VerificationModeFactory.times(1)).getMeasurement(anyDouble(), anyDouble(), isNotNull());
+        Mockito.verify(cache, VerificationModeFactory.times(1)).storeMeasurement(this.measurement);
+        Mockito.verify(aqicnMeasurementResolver, VerificationModeFactory.times(1)).getActualMeasurement(anyDouble(), anyDouble());
+        assertThat(found).isEqualTo(this.measurement);
+    }
+
+
+    @Test
+    public void testGetActualMeasurementByLocationOpenWeather() throws URISyntaxException, ParseException, IOException, APINotRespondingException, ServiceUnavailableException, LocationNotFoundException {
+        Map<String, String> locationResolverResults = new HashMap<>();
+        this.latitude = 38.7167;
+        this.longitude = -9.1333;
+        this.measurement.setLatitude(this.latitude);
+        this.measurement.setLongitude(this.longitude);
+        this.measurement.setLocation("Lisbon, PT");
+        locationResolverResults.put("latitude", "38.7167");
+        locationResolverResults.put("longitude", "-9.1333");
+        locationResolverResults.put("location", "Lisbon, PT");
+
+        Mockito.when(openWeatherMeasurementResolver.getLocationCoordinates("Lisboa")).thenReturn(locationResolverResults);
+        Mockito.when(cache.getMeasurement(this.latitude, this.longitude, "Lisbon, PT")).thenReturn(null);
+        Mockito.when(aqicnMeasurementResolver.getActualMeasurement(this.latitude, this.longitude))
+                .thenThrow(new APINotRespondingException("API not available"));
+        Mockito.when(openWeatherMeasurementResolver.getActualMeasurement(this.latitude, this.longitude)).thenReturn(this.measurement);
+
+
+        Measurement found = measurementService.getActualMeasurementByLocation("Lisboa");
+
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
+                .getLocationCoordinates("Lisboa");
+        Mockito.verify(cache, VerificationModeFactory.times(1)).getMeasurement(anyDouble(),
+                anyDouble(), isNotNull());
+        Mockito.verify(cache, VerificationModeFactory.times(1)).storeMeasurement(this.measurement);
+        Mockito.verify(aqicnMeasurementResolver, VerificationModeFactory.times(1))
+                .getActualMeasurement(anyDouble(), anyDouble());
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
+                .getActualMeasurement(anyDouble(), anyDouble());
+        assertThat(found).isEqualTo(this.measurement);
+    }
+
+    @Test
+    public void testGetActualMeasurementByLocationServiceUnavailableMeasurements() throws URISyntaxException, ParseException,
+            IOException, APINotRespondingException {
+        Map<String, String> locationResolverResults = new HashMap<>();
+        this.latitude = 38.7167;
+        this.longitude = -9.1333;
+        this.measurement.setLatitude(this.latitude);
+        this.measurement.setLongitude(this.longitude);
+        this.measurement.setLocation("Lisbon, PT");
+        locationResolverResults.put("latitude", "38.7167");
+        locationResolverResults.put("longitude", "-9.1333");
+        locationResolverResults.put("location", "Lisbon, PT");
+
+        Mockito.when(openWeatherMeasurementResolver.getLocationCoordinates("Lisboa")).thenReturn(locationResolverResults);
+        Mockito.when(cache.getMeasurement(this.latitude, this.longitude, "Lisbon, PT")).thenReturn(null);
+        Mockito.when(aqicnMeasurementResolver.getActualMeasurement(this.latitude, this.longitude))
+                .thenThrow(new APINotRespondingException("API not available"));
+        Mockito.when(openWeatherMeasurementResolver.getActualMeasurement(this.latitude, this.longitude))
+                .thenThrow(new APINotRespondingException("API not available"));
+
+
+        assertThrows(ServiceUnavailableException.class, () -> {
+            measurementService.getActualMeasurementByLocation("Lisboa");
+        }, "All services unavailable.");
+
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
+                .getLocationCoordinates("Lisboa");
+        Mockito.verify(cache, VerificationModeFactory.times(1))
+                .getMeasurement(anyDouble(), anyDouble(), isNotNull());
+        Mockito.verify(cache, VerificationModeFactory.times(0)).storeMeasurement(this.measurement);
+        Mockito.verify(aqicnMeasurementResolver, VerificationModeFactory.times(1))
+                .getActualMeasurement(anyDouble(), anyDouble());
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
+                .getActualMeasurement(anyDouble(), anyDouble());
+    }
+
+    @Test
+    public void testGetActualMeasurementByLocationServiceUnavailableLocationResolver() throws URISyntaxException, ParseException,
+            IOException, APINotRespondingException {
+
+        Mockito.when(openWeatherMeasurementResolver.getLocationCoordinates("Lisboa"))
+                .thenThrow(new APINotRespondingException("API not available"));
+
+        assertThrows(ServiceUnavailableException.class, () -> {
+            measurementService.getActualMeasurementByLocation("Lisboa");
+        }, "All services unavailable.");
+
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
+                .getLocationCoordinates("Lisboa");
+    }
+
+    @Test
+    public void testGetActualMeasurementByLocationLocationNotFound() throws URISyntaxException, ParseException,
+            IOException, APINotRespondingException {
+
+        Mockito.when(openWeatherMeasurementResolver.getLocationCoordinates("xasdasdasd"))
+                .thenThrow(ParseException.class);
+
+        assertThrows(LocationNotFoundException.class, () -> {
+            measurementService.getActualMeasurementByLocation("Lisboa");
+        }, "Location not found.");
+
+        Mockito.verify(openWeatherMeasurementResolver, VerificationModeFactory.times(1))
+                .getLocationCoordinates("Lisboa");
+    }
+
+
 }
