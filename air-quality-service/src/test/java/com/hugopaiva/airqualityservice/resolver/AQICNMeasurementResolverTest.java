@@ -4,10 +4,8 @@ import com.hugopaiva.airqualityservice.connection.HttpClient;
 import com.hugopaiva.airqualityservice.exception.APINotRespondingException;
 import com.hugopaiva.airqualityservice.model.Measurement;
 import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,6 +44,14 @@ class AQICNMeasurementResolverTest {
         assertThat(result.getLongitude()).isEqualTo(-9.1333);
         assertThat(result.getO3()).isEqualTo(24.8);
         assertThat(result.getSo2()).isEqualTo(0.6);
+        assertThat(result.getHumidity()).isEqualTo(72);
+        assertThat(result.getPressure()).isEqualTo(1022);
+        assertThat(result.getPm10()).isEqualTo(14);
+        assertThat(result.getPm25()).isEqualTo(17);
+        assertThat(result.getTemperature()).isEqualTo(15);
+        assertThat(result.getSo2()).isEqualTo(0.6);
+        assertThat(result.getWind()).isEqualTo(6.1);
+        assertThat(result.getCo()).isNull();
 
         verify(httpClient, times(1)).get(anyString());
     }

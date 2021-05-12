@@ -210,5 +210,16 @@ class CacheTest {
 
     }
 
+    @Test
+    void testStoreMeasurementAlreadyExistent() {
+        when(measurementRepository.findByLatitudeAndLongitude(this.measurement.getLatitude(), this.measurement.getLongitude()))
+                .thenReturn(Optional.ofNullable(this.measurement));
+
+        assertEquals(cache.storeMeasurement(this.measurement), this.measurement);
+
+        verify(measurementRepository, times(0)).saveAndFlush(this.measurement);
+
+    }
+
 
 }

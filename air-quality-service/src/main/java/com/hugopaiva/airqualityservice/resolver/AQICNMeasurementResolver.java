@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
 
 @Component
 public class AQICNMeasurementResolver implements MeasurementResolver {
