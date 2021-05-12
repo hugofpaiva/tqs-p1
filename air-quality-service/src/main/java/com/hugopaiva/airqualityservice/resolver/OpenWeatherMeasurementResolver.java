@@ -23,7 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Component
-public class OpenWeatherMeasurementResolver implements MeasurementResolver{
+public class OpenWeatherMeasurementResolver implements MeasurementResolver {
 
     private static final Logger log = LoggerFactory.getLogger(OpenWeatherMeasurementResolver.class);
 
@@ -38,8 +38,8 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
     public Measurement getActualMeasurement(Double latitude, Double longitude) throws URISyntaxException, IOException, APINotRespondingException, ParseException {
         URIBuilder uriBuilder = new URIBuilder("https://api.openweathermap.org/data/2.5/air_pollution");
         uriBuilder.addParameter("appid", environments.getProperty("openweathermap.api.key"));
-        uriBuilder.addParameter("lat", (new Formatter()).format(Locale.US, "%.6f", latitude).toString());
-        uriBuilder.addParameter("lon", (new Formatter()).format(Locale.US, "%.6f", longitude).toString());
+        uriBuilder.addParameter("lat", latitude.toString());
+        uriBuilder.addParameter("lon", longitude.toString());
 
         String response = this.httpClient.get(uriBuilder.build().toString());
 
@@ -55,14 +55,14 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
         Integer aqi = ((Long) ((JSONObject) obj.get("main")).get("aqi")).intValue();
         JSONObject components = (JSONObject) obj.get("components");
 
-        Double co =  Double.valueOf(String.valueOf(components.get("co")));
-        Double no =  Double.valueOf(String.valueOf(components.get("no")));
-        Double no2 =  Double.valueOf(String.valueOf(components.get("no2")));
+        Double co = Double.valueOf(String.valueOf(components.get("co")));
+        Double no = Double.valueOf(String.valueOf(components.get("no")));
+        Double no2 = Double.valueOf(String.valueOf(components.get("no2")));
         Double o3 = Double.valueOf(String.valueOf(components.get("o3")));
-        Double so2 =  Double.valueOf(String.valueOf(components.get("so2")));
-        Double pm25 =  Double.valueOf(String.valueOf(components.get("pm2_5")));
-        Double pm10 =  Double.valueOf(String.valueOf(components.get("pm10")));
-        Double nh3 =  Double.valueOf(String.valueOf(components.get("nh3")));
+        Double so2 = Double.valueOf(String.valueOf(components.get("so2")));
+        Double pm25 = Double.valueOf(String.valueOf(components.get("pm2_5")));
+        Double pm10 = Double.valueOf(String.valueOf(components.get("pm10")));
+        Double nh3 = Double.valueOf(String.valueOf(components.get("nh3")));
 
         Measurement result = new Measurement();
         result.setLatitude(latitude);
@@ -98,7 +98,7 @@ public class OpenWeatherMeasurementResolver implements MeasurementResolver{
 
         HashMap<String, String> result = new HashMap<>();
 
-        JSONArray jsonArray = (JSONArray) new  JSONParser().parse(data);
+        JSONArray jsonArray = (JSONArray) new JSONParser().parse(data);
         JSONObject location = (JSONObject) jsonArray.get(0);
 
         result.put("latitude", String.valueOf(location.get("lat")));
