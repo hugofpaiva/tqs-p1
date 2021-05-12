@@ -21,6 +21,10 @@ class AirQualityServiceApplicationTests {
 	private Cache cache;
 
 	@Test
+	public void contextLoads() {
+	}
+
+	@Test
 	void testSchedulerWithContext() {
 		await()
 		      .atMost(Duration.ofSeconds(65))
