@@ -3,6 +3,7 @@ package com.hugopaiva.airqualityservice.controller;
 import com.hugopaiva.airqualityservice.model.CacheResponseState;
 import com.hugopaiva.airqualityservice.model.Request;
 import com.hugopaiva.airqualityservice.services.RequestService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -117,8 +117,8 @@ class RequestControllerMockMvcMockServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(requests.size()))
-                .andExpect(jsonPath("$[*]['latitude']", containsInRelativeOrder(requestsLat.toArray())))
-                .andExpect(jsonPath("$[*]['longitude']", containsInRelativeOrder(requestsLon.toArray())));
+                .andExpect(jsonPath("$[*]['latitude']", Matchers.contains(requestsLat.toArray())))
+                .andExpect(jsonPath("$[*]['longitude']", Matchers.contains(requestsLon.toArray())));
 
         verify(requestService, times(1)).getRequests(0,10);
     }

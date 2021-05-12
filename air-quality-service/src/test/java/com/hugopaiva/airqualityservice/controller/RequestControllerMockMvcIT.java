@@ -128,9 +128,9 @@ class RequestControllerMockMvcIT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(this.savedRequests.size()))
-                .andExpect(jsonPath("$[*]['latitude']", containsInRelativeOrder(requestsLat.toArray())))
-                .andExpect(jsonPath("$[*]['longitude']", containsInRelativeOrder(requestsLon.toArray())))
-                .andExpect(jsonPath("$[*]['id']", containsInRelativeOrder(requestsId.toArray())));
+                .andExpect(jsonPath("$[*]['latitude']", contains(requestsLat.toArray())))
+                .andExpect(jsonPath("$[*]['longitude']", contains(requestsLon.toArray())))
+                .andExpect(jsonPath("$[*]['id']", contains(requestsId.toArray())));
     }
 
     @Test
