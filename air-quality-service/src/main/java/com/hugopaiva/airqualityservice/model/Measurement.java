@@ -1,8 +1,6 @@
 package com.hugopaiva.airqualityservice.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,7 +9,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @ToString
 @Entity
 @NoArgsConstructor
