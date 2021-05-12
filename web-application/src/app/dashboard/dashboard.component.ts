@@ -15,12 +15,13 @@ import {NgxSpinnerService} from 'ngx-spinner';
 export class DashboardComponent implements OnInit {
   measurement: Measurement;
   private requested = false;
+  notFound = false;
   error = false;
   private checkFormErrors = false;
-  private valuesLine1: Map<String, String> = new Map([['co', 'g'], ['no', 'f'], ['no2', 'f'], ['o3', 'f']]);
-  private valuesLine2: Map<String, String> = new Map([['so2', 'g'], ['pm25', 'f'], ['pm10', 'f'], ['nh3', 'f']]);
-  private valuesLine3: Map<String, String[]> = new Map([['wind', ['g', 'fas fa-paper-plane']], ['humidity', ['g', 'fas fa-tint']],
-    ['pressure', ['g', 'fas fa-tachometer-alt']]]);
+  private valuesLine1: Map<String, String> = new Map([['co', 'μg/m3'], ['no', 'μg/m3'], ['no2', 'μg/m3'], ['o3', 'μg/m3']]);
+  private valuesLine2: Map<String, String> = new Map([['so2', 'μg/m3'], ['pm25', 'μg/m3'], ['pm10', 'μg/m3'], ['nh3', 'μg/m3']]);
+  private valuesLine3: Map<String, String[]> = new Map([['wind', ['km/h', 'fas fa-paper-plane']], ['humidity', ['%', 'fas fa-tint']],
+    ['pressure', ['', 'fas fa-tachometer-alt']]]);
 
   selectedSearch: String = 'Coordinates';
 
@@ -49,6 +50,7 @@ export class DashboardComponent implements OnInit {
   getActualMeasurementCoordinates(lat: number, long: number ): void {
     this.spinner.show();
     this.requested = true;
+    this.notFound = false;
     this.error = false;
     this.measurementService.getMeasurementCoordinates(lat, long).subscribe(measurement => {
       this.measurement = measurement;
@@ -63,6 +65,7 @@ export class DashboardComponent implements OnInit {
 
   getActualMeasurementLocation(location: String): void {
     this.spinner.show();
+    this.notFound = false;
     this.requested = true;
     this.error = false;
     this.measurementService.getMeasurementLocation(location).subscribe(measurement => {
@@ -70,6 +73,9 @@ export class DashboardComponent implements OnInit {
       this.requested = false;
       this.spinner.hide();
     }, (err: HttpErrorResponse) => {
+      if (err.status === 404) {
+        this.notFound = true;
+      }
       this.error = true;
       this.requested = false;
       this.spinner.hide();
@@ -80,6 +86,7 @@ export class DashboardComponent implements OnInit {
     this.selectedSearch = event;
     this.checkFormErrors = false;
     this.error = false;
+    this.notFound = false;
     this.measurement = undefined;
   }
 
