@@ -9,9 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
 @NoArgsConstructor
 public class Measurement {
