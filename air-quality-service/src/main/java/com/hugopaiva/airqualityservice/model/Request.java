@@ -1,8 +1,6 @@
 package com.hugopaiva.airqualityservice.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -12,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-@EqualsAndHashCode
 @Entity
 @NoArgsConstructor
 public class Request {
@@ -46,10 +43,10 @@ public class Request {
         this.longitude = longitude;
     }
 
-    public Request(CacheResponseState cacheResponse, String airQualityLocationAccessed, Double latitude, Double longitude) {
+    public Request(CacheResponseState cacheResponse, Double latitude, Double longitude, String airQualityLocationAccessed) {
         this.cacheResponse = cacheResponse;
-        this.airQualityLocationAccessed = airQualityLocationAccessed;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.airQualityLocationAccessed = airQualityLocationAccessed;
     }
 }

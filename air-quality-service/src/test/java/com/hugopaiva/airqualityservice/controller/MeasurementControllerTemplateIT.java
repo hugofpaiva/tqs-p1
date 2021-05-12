@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
@@ -21,6 +22,9 @@ import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
@@ -42,67 +46,75 @@ public class MeasurementControllerTemplateIT {
 
 
     @Test
-    public void testWhenInvalidLatMin_thenBadRequest() {
+    public void testCoordinatesWhenInvalidLatMin_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-182.903213+"&lat="+90.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+-182.903213+"&lat="+90.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testWhenInvalidLatMax_thenBadRequest() {
+    public void testCoordinatesWhenInvalidLatMax_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+91.903213+"&lat="+90.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+91.903213+"&lat="+90.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testWhenInvalidLonMin_thenBadRequest() {
+    public void testCoordinatesWhenInvalidLonMin_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-85.903213+"&lat="+-185.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+-85.903213+"&lat="+-185.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testWhenInvalidLonMax_thenBadRequest() {
+    public void testCoordinatesWhenInvalidLonMax_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+-85.903213+"&lat="+185.213212, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+-85.903213+"&lat="+185.213212, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testWhenNoParams_thenBadRequest() {
+    public void testCoordinatesWhenNoParams_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement", Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates", Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testWhenOnlyLat_thenBadRequest() {
+    public void testCoordinatesWhenOnlyLat_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+52.435231, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+52.435231, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testWhenOnlyLon_thenBadRequest() {
+    public void testCoordinatesWhenOnlyLon_thenBadRequest() {
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lon="+52.435231, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lon="+52.435231, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void testHavingCache_thenStatus200() {
+    public void testCoordinatesWhenString_thenBadRequest() {
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat=zsasdsd&lon=asdasd", Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+    }
+
+    @Test
+    public void testCoordinatesHavingCache_thenStatus200() {
         Measurement m = createTestMeasurement();
 
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+m.getLatitude()+"&lon="+m.getLongitude(), Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+m.getLatitude()+"&lon="+m.getLongitude(), Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 
@@ -111,14 +123,12 @@ public class MeasurementControllerTemplateIT {
     }
 
     @Test
-    public void testHavingNoCacheGettingFromAPI_thenStatus200() {
-        // Assuming the first API (AQICN) will respond
-
+    public void testCoordinatesHavingNoCacheGettingFromAPI_thenStatus200() {
         Double latitude = 50.342123;
         Double longitude = 52.342123;
 
         ResponseEntity<Measurement> response = testRestTemplate.
-                getForEntity(getBaseUrl() + "/actual-measurement?lat="+latitude+"&lon="+longitude, Measurement.class);
+                getForEntity(getBaseUrl() + "/actual-measurement-coordinates?lat="+latitude+"&lon="+longitude, Measurement.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 
@@ -126,9 +136,49 @@ public class MeasurementControllerTemplateIT {
 
         assertThat(responseMeasurement.getLatitude(), equalTo(latitude));
         assertThat(responseMeasurement.getLongitude(), equalTo(longitude));
-        assertThat(responseMeasurement.getResponseSource(), equalTo(ResponseSource.AQICN));
         assertThat(responseMeasurement.getAirQualityIndex(), is(any(Integer.class)));
 
+    }
+
+    @Test
+    public void testLocationWhenBadLocation_thenNotFound(){
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement-location?location=localizacaonaoexistente", Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void testLocationHavingCache_thenStatus200() {
+        Measurement m = createTestMeasurement();
+        m.setLatitude(38.7167);
+        m.setLongitude(-9.1333);
+        m.setLocation("Lisbon, PT");
+        m = measurementRepository.saveAndFlush(m);
+
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement-location?location=Lisboa", Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+
+        assertThat(response.getBody(), equalTo(m));
+    }
+
+    @Test
+    public void testLocationHavingNoCacheGettingFromAPI_thenStatus200() {
+        String location = "Lisboa";
+
+        ResponseEntity<Measurement> response = testRestTemplate.
+                getForEntity(getBaseUrl() + "/actual-measurement-location?location=Lisboa", Measurement.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+
+        Measurement responseMeasurement = response.getBody();
+
+        assertThat(responseMeasurement.getLatitude(), equalTo(38.7167));
+        assertThat(responseMeasurement.getLongitude(), equalTo(-9.1333));
+        assertThat(responseMeasurement.getLocation(), equalTo("Lisbon, PT"));
+        assertThat(responseMeasurement.getAirQualityIndex(), is(any(Integer.class)));
     }
 
     private Measurement createTestMeasurement() {

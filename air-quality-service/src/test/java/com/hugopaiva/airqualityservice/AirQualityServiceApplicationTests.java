@@ -17,16 +17,25 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 class AirQualityServiceApplicationTests {
 
-	@SpyBean
-	private Cache cache;
+    @SpyBean
+    private Cache cache;
 
-	@Test
-	void testSchedulerWithContext() {
-		await()
-		      .atMost(Duration.ofSeconds(65))
-		        .untilAsserted(() -> verify(cache, atLeast(1))
-						.cleanExpiredCachedMeasurements());
+    @Test
+    public void contextLoads() {
+    }
 
-	}
+    @Test
+    public void testMain() {
+        AirQualityServiceApplication.main(new String[]{});
+    }
+
+    @Test
+    void testSchedulerWithContext() {
+        await()
+                .atMost(Duration.ofSeconds(65))
+                .untilAsserted(() -> verify(cache, atLeast(1))
+                        .cleanExpiredCachedMeasurements());
+
+    }
 
 }

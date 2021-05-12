@@ -34,25 +34,38 @@ export class DashboardComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private measurementService: MeasurementService, private spinner: NgxSpinnerService) {
     this.coordinatesForm = this.formBuilder.group({
-      longitude: ['', [Validators.required, Validators.min(-180.000000), Validators.max(180.000000),
-        Validators.pattern('^-?\\d+\\.\\d{6,6}$')]],
-      latitude: ['', [Validators.required, Validators.min(-90.000000), Validators.max(90.000000),
-        Validators.pattern('^-?\\d+\\.\\d{6,6}$')]]
+      longitude: ['longitude', [Validators.required, Validators.min(-180), Validators.max(180)]],
+      latitude: ['latitude', [Validators.required, Validators.min(-90), Validators.max(90)]]
     });
 
     this.locationForm = this.formBuilder.group({
-      location: ['', [Validators.required, Validators.maxLength(255)]],
+      location: ['location', [Validators.required, Validators.maxLength(255)]],
     });
   }
 
   ngOnInit() {
   }
 
-  getActualMeasurement(lat: number, long: number ): void {
+  getActualMeasurementCoordinates(lat: number, long: number ): void {
     this.spinner.show();
     this.requested = true;
     this.error = false;
-    this.measurementService.getMeasurement(lat, long).subscribe(measurement => {
+    this.measurementService.getMeasurementCoordinates(lat, long).subscribe(measurement => {
+      this.measurement = measurement;
+      this.requested = false;
+      this.spinner.hide();
+    }, (err: HttpErrorResponse) => {
+      this.error = true;
+      this.requested = false;
+      this.spinner.hide();
+    });
+  }
+
+  getActualMeasurementLocation(location: String): void {
+    this.spinner.show();
+    this.requested = true;
+    this.error = false;
+    this.measurementService.getMeasurementLocation(location).subscribe(measurement => {
       this.measurement = measurement;
       this.requested = false;
       this.spinner.hide();
@@ -67,6 +80,7 @@ export class DashboardComponent implements OnInit {
     this.selectedSearch = event;
     this.checkFormErrors = false;
     this.error = false;
+    this.measurement = undefined;
   }
 
   errorsCheck() {
