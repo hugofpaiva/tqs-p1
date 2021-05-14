@@ -4,13 +4,16 @@ services:
   spring:
     build: ./air-quality-service
     container_name: air-quality-service
-    ports:
-      - 8080:8080
     restart: unless-stopped
     image: air-quality-service
+    ports:
+      - 8080:8080
   angular:
       build: ./web-application
       container_name: air-quality-angular
+      environment: 
+        - API_BASE_URL=http://spring:8080/api/
       restart: unless-stopped
       ports:
           - 80:80
+          

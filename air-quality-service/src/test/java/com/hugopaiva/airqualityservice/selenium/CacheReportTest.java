@@ -1,22 +1,24 @@
 package com.hugopaiva.airqualityservice.selenium;
 
+import static io.github.bonigarcia.seljup.BrowserType.FIREFOX;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumJupiter;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // SpringBootTest to run the REST API
@@ -25,10 +27,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CacheReportTest {
 
+    private String webApplicationBaseUrl = "host.docker.internal";
+
     @Test
     @Order(1)
-    void testGetRequestAndFoundNone(FirefoxDriver driver) {
-        driver.get("http://localhost:4200");
+    void testGetRequestAndFoundNone(@DockerBrowser(type = FIREFOX, version = "84") RemoteWebDriver driver) {
+        driver.get("http://" + webApplicationBaseUrl + ":4200");
         driver.manage().window().setSize(new Dimension(1792, 1022));
         driver.findElement(By.cssSelector(".nav-item:nth-child(2) p")).click();
         {
@@ -44,15 +48,15 @@ public class CacheReportTest {
 
     @Test
     @Order(2)
-    void testGetActualMeasurementCoordinatesAndCheckRequests(FirefoxDriver driver) {
-        driver.get("http://localhost:4200/");
+    void testGetActualMeasurementCoordinatesAndCheckRequests(@DockerBrowser(type = FIREFOX, version = "84") RemoteWebDriver driver) {
+        driver.get("http://" + webApplicationBaseUrl + ":4200/");
         driver.manage().window().setSize(new Dimension(1792, 1025));
         {
             WebDriverWait wait = new WebDriverWait(driver, 30);
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h3")));
         }
-        assertEquals(driver.getTitle(), "Air Quality");
-        assertEquals(driver.findElement(By.cssSelector("h3")).getText(), "Search by Coordinates");
+        assertEquals("Air Quality", driver.getTitle());
+        assertEquals("Search by Coordinates", driver.findElement(By.cssSelector("h3")).getText());
         driver.findElement(By.cssSelector(".form-group:nth-child(1) > .ng-pristine")).click();
         driver.findElement(By.cssSelector(".form-group:nth-child(1) > .ng-pristine")).sendKeys("42");
         driver.findElement(By.cssSelector(".form-group:nth-child(2) > .form-control")).click();
@@ -101,19 +105,19 @@ public class CacheReportTest {
 
     @Test
     @Order(3)
-    void testGetActualMeasurementLocationAndCheckRequests(FirefoxDriver driver) {
-        driver.get("http://localhost:4200/");
+    void testGetActualMeasurementLocationAndCheckRequests(@DockerBrowser(type = FIREFOX, version = "84") RemoteWebDriver driver) {
+        driver.get("http://" + webApplicationBaseUrl + ":4200/");
         driver.manage().window().setSize(new Dimension(1792, 1025));
         {
             WebDriverWait wait = new WebDriverWait(driver, 30);
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h3")));
         }
-        assertEquals(driver.getTitle(), "Air Quality");
+        assertEquals("Air Quality", driver.getTitle());
         {
             WebElement dropdown = driver.findElement(By.cssSelector(".form-control:nth-child(1)"));
             dropdown.findElement(By.xpath("//option[. = 'Search by Location']")).click();
         }
-        assertEquals(driver.findElement(By.cssSelector("h3")).getText(), "Search by Location");
+        assertEquals("Search by Location", driver.findElement(By.cssSelector("h3")).getText());
         driver.findElement(By.cssSelector("option:nth-child(2)")).click();
         driver.findElement(By.cssSelector(".form-control:nth-child(2)")).click();
         driver.findElement(By.cssSelector(".form-control:nth-child(2)")).sendKeys("Lisboa");
