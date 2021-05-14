@@ -54,8 +54,10 @@ That said, the steps are as follows:
 
 1. Change the _Angular_ environment to do the requests of the API to your machine
 
-   Example to run on `localhost`. If you are hosting in another machine, the IP address of it should be in the place of `localhost`:
+   Example to run on `localhost`. If you are hosting in another machine, the IP address of it should be in the place of `localhost`.
+   
      - Change the [environment.prod.ts](./web-application/src/environments/environment.prod.ts) file as the following:
+     
       ```
       import { HttpHeaders } from '@angular/common/http';
       export const environment = {
