@@ -89,6 +89,8 @@ The system was made available through the _Google Cloud Platform_ and according 
 
 **Web application available at:** [35.246.89.129](http://35.246.89.129)
 
+**API docs available at:** [35.246.89.129:8080/api/swagger-ui/index.html](http://35.246.89.129:8080/api/swagger-ui/index.html)
+
 ## Details
 
 You can find all the details in the [Work Report](./report/relatorio.pdf). Be aware, the Work Report was made in Portuguese.
