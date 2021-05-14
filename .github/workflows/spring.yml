@@ -43,5 +43,5 @@ jobs:
     - name: Prepare Docker for Selenium
       run: docker pull aerokube/selenoid:1.10.1 && docker pull selenoid/vnc:firefox_84.0  
     - name: Send code to SonarQube server and wait for quality gate
-      run: mvn -B clean verify sonar:sonar -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} #-Dsonar.qualitygate.wait=true
+      run: mvn -B clean verify sonar:sonar -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} -Dsonar.qualitygate.wait=true
       working-directory: ./air-quality-service

@@ -36,15 +36,13 @@ Built with:
 ## Architecture
 
 <p align="center">
-  <img  src="/report/architecture.png">
+  <img  src="./report/arch.png">
 </p>
 
 ### Components
 
 - [**Web Application (Angular)**](./web-application)
 - [**Service (Spring Boot)**](./air-quality-service)
-
-## Tests
 
 ## How to Run
 
@@ -91,8 +89,13 @@ The system was made available through the _Google Cloud Platform_ and according 
 
 **API docs available at:** [35.246.89.129:8080/api/swagger-ui/index.html](http://35.246.89.129:8080/api/swagger-ui/index.html)
 
-## Details
+**Static Code Analysis with SonarQube available at:** [34.89.73.181:9000](http://http://34.89.73.181:9000/)
 
-You can find all the details in the [Work Report](./report/relatorio.pdf). Be aware, the Work Report was made in Portuguese.
+- Login: admin
+- Password: tqs-p1
+
+## Details and Tests
+
+You can find all the details and Tests info in the [Work Report](./report/relatorio.pdf). Be aware, the Work Report was made in Portuguese.
 
 
