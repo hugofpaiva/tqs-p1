@@ -89,7 +89,7 @@ The system was made available through the _Google Cloud Platform_ and according 
 
 **API docs available at:** [35.246.89.129:8080/api/swagger-ui/index.html](http://35.246.89.129:8080/api/swagger-ui/index.html)
 
-**Static Code Analysis with SonarQube available at:** [34.89.73.181:9000](http://http://34.89.73.181:9000/)
+**Static Code Analysis with SonarQube available at:** [34.89.73.181:9000](http://34.89.73.181:9000/)
 
 - Login: admin
 - Password: tqs-p1
