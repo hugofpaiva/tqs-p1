@@ -91,6 +91,6 @@ The system was made available through the _Google Cloud Platform_ and according 
 
 ## Details
 
-You can find all the details in the [Work Report] (./report/relatorio.pdf). Be aware, the Work Report was made in Portuguese.
+You can find all the details in the [Work Report](./report/relatorio.pdf). Be aware, the Work Report was made in Portuguese.
 
 
