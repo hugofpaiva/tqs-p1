@@ -1,5 +1,5 @@
 <div class="panel-header panel-header-lg"
-     style=" display: flex; flex-direction: column; justify-content: space-around; padding-top: 0px">
+     style=" display: flex; flex-direction: column; justify-content: space-around; padding-top: 15px">
     <div class="row" style="margin-top: 50px">
         <div class="col-md-3" style="display: flex; justify-content: space-around">
             <div class="form-group">
@@ -136,6 +136,8 @@
                 <div class="card-body" style="display: flex; justify-content: space-around">
                     <i class="fab fa-envira fa-2x" style="color: #93D16E"></i>  <h5>{{measurement.airQualityIndex}}</h5>
                 </div>
+                <a *ngIf="measurement.responseSource === 'AQICN'" href="https://www.airnow.gov/aqi/aqi-basics/"><h6 style="text-align: center">more info</h6></a>
+                <a *ngIf="measurement.responseSource === 'OPENWEATHER'" href="https://openweathermap.org/api/air-pollution"><h6 style="text-align: center">more info</h6></a>
             </div>
 
             <div class="card col-md-3">
@@ -186,8 +188,12 @@
 
     </div>
 
-    <div *ngIf="error" style="margin-top: 200px">
+    <div *ngIf="error && !notFound" style="margin-top: 200px">
         <h3 style="text-align: center">There was an error during the request!</h3>
+    </div>
+
+    <div *ngIf="error && notFound" style="margin-top: 200px">
+        <h3 style="text-align: center">Location not found!</h3>
     </div>
 </div>
 

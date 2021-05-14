@@ -21,7 +21,6 @@
 		<swagger.version>3.0.0</swagger.version>
 		<spring.plugin.core.version>2.0.0.RELEASE</spring.plugin.core.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-		<selenium.version>3.4.0</selenium.version>
 		<jacoco.version>0.8.6</jacoco.version>
 	</properties>
 
@@ -105,9 +104,16 @@
 		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>selenium-jupiter</artifactId>
-			<version>${selenium.version}</version>
+			<version>3.4.0</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.141.59</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

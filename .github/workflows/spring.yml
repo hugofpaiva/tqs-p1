@@ -17,6 +17,12 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '11'
+    - name: Build Docker-Compose
+      run: docker-compose build angular
+    - name: Start Angular on Docker
+      run: docker-compose run -p 4200:80 -e API_BASE_URL=http://172.17.0.1:8080/api/ -d angular 
+    - name: Prepare Docker for Selenium
+      run: docker pull aerokube/selenoid:1.10.1 && docker pull selenoid/vnc:firefox_84.0 
     - name: Verify code executing each default lifecycle phase and IT tests
       run: mvn -B clean verify
       working-directory: ./air-quality-service
@@ -30,6 +36,12 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '11'
+    - name: Build Docker-Compose
+      run: docker-compose build angular
+    - name: Start Angular on Docker
+      run: docker-compose run -p 4200:80 -e API_BASE_URL=http://172.17.0.1:8080/api/ -d angular 
+    - name: Prepare Docker for Selenium
+      run: docker pull aerokube/selenoid:1.10.1 && docker pull selenoid/vnc:firefox_84.0  
     - name: Send code to SonarQube server and wait for quality gate
       run: mvn -B clean verify sonar:sonar -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} #-Dsonar.qualitygate.wait=true
       working-directory: ./air-quality-service

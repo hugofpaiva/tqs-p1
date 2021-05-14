@@ -25,11 +25,6 @@ class AirQualityServiceApplicationTests {
     }
 
     @Test
-    public void testMain() {
-        AirQualityServiceApplication.main(new String[]{});
-    }
-
-    @Test
     void testSchedulerWithContext() {
         await()
                 .atMost(Duration.ofSeconds(65))
