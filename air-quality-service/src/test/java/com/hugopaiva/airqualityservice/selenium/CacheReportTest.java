@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CacheReportTest {
 
-    private String webApplicationBaseUrl = "host.docker.internal";
+    private String webApplicationBaseUrl = "172.17.0.1";
 
     @Test
     @Order(1)
