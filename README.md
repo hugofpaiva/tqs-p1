@@ -85,7 +85,7 @@ The **Web application** will be available at: [localhost](http://localhost)
 
 ## Deploy
 
-The system was made available through the _Google Cloud Platform_ and according to [this guide](https://cloud.google.com/community/tutorials/docker-compose-on-container-optimized-os), using _free tier_. Briefly, a _VM_ was created, the repository was cloned, the `baseURL` was changed in the` environment.prod.ts` file to match the machine's IP and the _Docker Compose_ was executed according to the guide and with the _1.27.4_ version to support the _3.8_ version of the _Compose_ file. Finally, in the _Firewall_ definitions, ports 80 and 8080 were opened to allow access to the _web_ application and service, respectively.
+The system was made available through the _Google Cloud Platform_ and according to [this guide](https://cloud.google.com/community/tutorials/docker-compose-on-container-optimized-os), using _free tier_. Briefly, a _VM_ was created, the repository was cloned, the `baseURL` was changed in the `environment.prod.ts` file to match the machine's IP and the _Docker Compose_ was executed according to the guide and with the _1.27.4_ version to support the _3.8_ version of the _Compose_ file. Finally, in the _Firewall_ definitions, ports 80 and 8080 were opened to allow access to the _web_ application and service, respectively.
 
 **Web application available at:** [35.246.89.129](http://35.246.89.129)
 
