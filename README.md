@@ -44,7 +44,7 @@ Built with:
 - [**Web Application (Angular)**](./web-application)
 - [**Service (Spring Boot)**](./air-quality-service)
 
-# Tests
+## Tests
 
 ## How to Run
 
