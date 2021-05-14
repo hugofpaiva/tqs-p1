@@ -26,7 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class ActualMeasurementTest {
 
-    private String webApplicationBaseUrl = "host.docker.internal";
+    private String webApplicationBaseUrl = "172.17.0.1";
 
     @Test
     void testGetActualMeasurementCoordinates(@DockerBrowser(type = FIREFOX, version = "84") RemoteWebDriver driver) {
