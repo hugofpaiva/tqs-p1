@@ -1,4 +1,15 @@
-# Air Quality Dashboard
+<h1 align="center">
+ Air Quality Dashboard
+</h1>
+
+<p align="center">
+
+<a href="https://www.youtube.com/watch?v=4_sAMCed5b4">
+    <img src="./report/demo.gif" alt="Demo">
+  </a>
+
+> Demo video available by clicking on the image
+</p>
 
 <!--
 Not Working because of lack of ssl on server
