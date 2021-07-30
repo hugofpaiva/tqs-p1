@@ -109,4 +109,7 @@ The system was made available through the _Google Cloud Platform_ and according 
 
 You can find all the details and Tests info in the [Work Report](./report/relatorio.pdf). Be aware, the Work Report was made in Portuguese.
 
+## Grade
+Evaluated with **20** out of 20.
+
 
